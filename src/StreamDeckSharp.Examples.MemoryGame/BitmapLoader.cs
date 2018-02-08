@@ -8,7 +8,7 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 
-namespace StreamDeckSharp.ExampleCollection.MemoryGame
+namespace StreamDeckSharp.Examples.MemoryGame
 {
     public static class IconLoader
     {

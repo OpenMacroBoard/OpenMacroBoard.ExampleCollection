@@ -4,7 +4,7 @@ using StreamDeckSharp.Extensions;
 using System.Threading;
 using AForge.Video.FFMPEG;
 
-namespace StreamDeckSharp.ExampleCollection
+namespace StreamDeckSharp.Examples.VideoPlayer
 {
     class Program
     {

@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E47522DE-19FA-40E8-8DAF-786C69BF42B3}</ProjectGuid>
+    <ProjectGuid>{1A4F51EE-3AB6-4A09-AEF0-0A97899206E9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>StreamDeckSharp.ExampleCollection.MemoryGame</RootNamespace>
-    <AssemblyName>StreamDeckSharp.ExampleCollection.MemoryGame</AssemblyName>
+    <RootNamespace>StreamDeckSharp.Examples.ImageGlitchTest</RootNamespace>
+    <AssemblyName>StreamDeckSharp.Examples.ImageGlitchTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -33,7 +33,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -41,25 +40,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BitmapLoader.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ReferenceImageFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj">
       <Project>{d06ab787-766e-4b28-89c4-8d948070eb1c}</Project>
       <Name>StreamDeckSharp</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="icons\card0.png" />
-    <EmbeddedResource Include="icons\card1.png" />
-    <EmbeddedResource Include="icons\card2.png" />
-    <EmbeddedResource Include="icons\card3.png" />
-    <EmbeddedResource Include="icons\card4.png" />
-    <EmbeddedResource Include="icons\card5.png" />
-    <EmbeddedResource Include="icons\card6.png" />
-    <EmbeddedResource Include="icons\restart.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
