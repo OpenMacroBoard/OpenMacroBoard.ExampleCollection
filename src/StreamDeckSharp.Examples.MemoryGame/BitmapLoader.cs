@@ -15,7 +15,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
         public static KeyBitmap LoadIconByName(string name, bool active)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"StreamDeckSharp.ExampleCollection.MemoryGame.icons.{name}";
+            var resourceName = $"StreamDeckSharp.Examples.MemoryGame.icons.{name}";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (Bitmap bitmap = (Bitmap)Image.FromStream(stream))
