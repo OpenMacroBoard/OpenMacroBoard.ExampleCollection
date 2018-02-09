@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 
 namespace StreamDeckSharp.Examples.ImageGlitchTest
 {
@@ -18,6 +19,7 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
             //default (startup) value
             //press buttons on streamdeck to change method
             GetKeyBitmap = ReferenceImageFactory.GetChangingFilledImage;
+            Console.CancelKeyPress += Console_CancelKeyPress;
 
             var availableFunctions = new Func<int, KeyBitmap>[]
             {
@@ -38,7 +40,7 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
 
                 deck.KeyStateChanged += Deck_KeyStateChanged;
 
-                while (true)
+                while (mode == 0)
                 {
                     for (int i = 0; i < deck.KeyCount; i++)
                     {
@@ -46,6 +48,13 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
                     }
                 }
             }
+        }
+
+        private static volatile int mode = 0;
+        private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+        {
+            e.Cancel = true;
+            Interlocked.Increment(ref mode);
         }
 
         private static void Deck_KeyStateChanged(object sender, KeyEventArgs e)
