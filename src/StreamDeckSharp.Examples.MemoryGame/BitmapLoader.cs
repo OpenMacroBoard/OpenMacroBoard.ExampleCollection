@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
+using OpenMacroBoard.SDK;
 
 namespace StreamDeckSharp.Examples.MemoryGame
 {
@@ -26,7 +24,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
                     for (int i = 0; i < raw.Length; i++)
                         raw[i] /= 2;
                 }
-                return KeyBitmap.FromRawBitmap(raw);
+                return new KeyBitmap(72, 72, raw);
             }
         }
 

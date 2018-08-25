@@ -5,12 +5,6 @@ VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.VideoPlayer", "StreamDeckSharp.Examples.VideoPlayer\StreamDeckSharp.Examples.VideoPlayer.csproj", "{E775A0D6-894E-47A1-A0F9-095C0319312D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Extensions", "StreamDeckSharp.Extensions\StreamDeckSharp.Extensions.csproj", "{FC9B88C4-0CC2-4335-AFBF-48D8C42DC7A5}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp", "StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj", "{D06AB787-766E-4B28-89C4-8D948070EB1C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HidLibrary", "StreamDeckSharp\src\HidLibrary\src\HidLibrary\HidLibrary.csproj", "{9E8F1D50-74EA-4C60-BD5C-AB2C5B53BC66}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.MemoryGame", "StreamDeckSharp.Examples.MemoryGame\StreamDeckSharp.Examples.MemoryGame.csproj", "{E47522DE-19FA-40E8-8DAF-786C69BF42B3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.DrawFullScreen", "StreamDeckSharp.Examples.DrawFullScreen\StreamDeckSharp.Examples.DrawFullScreen.csproj", "{1053A6D8-353E-4848-9434-5A35F32E9180}"
@@ -23,7 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.Ra
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.ImageGlitchTest", "StreamDeckSharp.Examples.ImageGlitchTest\StreamDeckSharp.Examples.ImageGlitchTest.csproj", "{1A4F51EE-3AB6-4A09-AEF0-0A97899206E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Example.MeasureSetBitmapSpeed", "StreamDeckSharp.Example.MeasureSetBitmapSpeed\StreamDeckSharp.Example.MeasureSetBitmapSpeed.csproj", "{C772FD1B-96FE-46EF-B5E9-0F51050CF910}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.MeasureSetBitmapSpeed", "StreamDeckSharp.Example.MeasureSetBitmapSpeed\StreamDeckSharp.Examples.MeasureSetBitmapSpeed.csproj", "{C772FD1B-96FE-46EF-B5E9-0F51050CF910}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.DrawKeys", "StreamDeckSharp.Examples.DrawKeys\StreamDeckSharp.Examples.DrawKeys.csproj", "{CA6D69CF-D403-4C49-8520-B62B3A98430C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StreamDeckSharp.Examples.CommonStuff", "StreamDeckSharp.Examples.CommonStuff\StreamDeckSharp.Examples.CommonStuff.csproj", "{26FD41D1-A64D-48F7-9E37-9A114D3DC503}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,18 +33,6 @@ Global
 		{E775A0D6-894E-47A1-A0F9-095C0319312D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E775A0D6-894E-47A1-A0F9-095C0319312D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E775A0D6-894E-47A1-A0F9-095C0319312D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FC9B88C4-0CC2-4335-AFBF-48D8C42DC7A5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FC9B88C4-0CC2-4335-AFBF-48D8C42DC7A5}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FC9B88C4-0CC2-4335-AFBF-48D8C42DC7A5}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FC9B88C4-0CC2-4335-AFBF-48D8C42DC7A5}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D06AB787-766E-4B28-89C4-8D948070EB1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D06AB787-766E-4B28-89C4-8D948070EB1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D06AB787-766E-4B28-89C4-8D948070EB1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D06AB787-766E-4B28-89C4-8D948070EB1C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9E8F1D50-74EA-4C60-BD5C-AB2C5B53BC66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9E8F1D50-74EA-4C60-BD5C-AB2C5B53BC66}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9E8F1D50-74EA-4C60-BD5C-AB2C5B53BC66}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9E8F1D50-74EA-4C60-BD5C-AB2C5B53BC66}.Release|Any CPU.Build.0 = Release|Any CPU
 		{E47522DE-19FA-40E8-8DAF-786C69BF42B3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{E47522DE-19FA-40E8-8DAF-786C69BF42B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E47522DE-19FA-40E8-8DAF-786C69BF42B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -75,11 +61,22 @@ Global
 		{C772FD1B-96FE-46EF-B5E9-0F51050CF910}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C772FD1B-96FE-46EF-B5E9-0F51050CF910}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C772FD1B-96FE-46EF-B5E9-0F51050CF910}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CA6D69CF-D403-4C49-8520-B62B3A98430C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA6D69CF-D403-4C49-8520-B62B3A98430C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA6D69CF-D403-4C49-8520-B62B3A98430C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA6D69CF-D403-4C49-8520-B62B3A98430C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26FD41D1-A64D-48F7-9E37-9A114D3DC503}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26FD41D1-A64D-48F7-9E37-9A114D3DC503}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26FD41D1-A64D-48F7-9E37-9A114D3DC503}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26FD41D1-A64D-48F7-9E37-9A114D3DC503}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {BADF5F5D-273D-40A9-B9BF-3404FC1045F4}
+	EndGlobalSection
+	GlobalSection(Performance) = preSolution
+		HasPerformanceSessions = true
 	EndGlobalSection
 EndGlobal

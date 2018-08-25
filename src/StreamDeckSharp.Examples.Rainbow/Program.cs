@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp.Examples.CommonStuff;
 
 namespace StreamDeckSharp.Examples.Rainbow
 {
@@ -11,13 +13,13 @@ namespace StreamDeckSharp.Examples.Rainbow
     {
         private static readonly Random rnd = new Random();
         private static readonly ManualResetEvent exitSignal = new ManualResetEvent(false);
-        private static byte[] rgbBuffer = new byte[3];
+        private static readonly byte[] rgbBuffer = new byte[3];
 
         static void Main(string[] args)
         {
             Console.CancelKeyPress += Console_CancelKeyPress;
-         
-            using (var deck = StreamDeck.OpenDevice())
+
+            using (var deck = ExampleHelper.OpenBoard())
             {
                 deck.SetBrightness(100);
 
@@ -32,8 +34,8 @@ namespace StreamDeckSharp.Examples.Rainbow
 
         private static void Deck_KeyPressed(object sender, KeyEventArgs e)
         {
-            var d = sender as IStreamDeck;
-            if (d == null) return;
+            if (!(sender is IMacroBoard d))
+                return;
 
             if (e.IsDown)
                 d.SetKeyBitmap(e.Key, GetRandomColorImage());
@@ -42,7 +44,7 @@ namespace StreamDeckSharp.Examples.Rainbow
         private static KeyBitmap GetRandomColorImage()
         {
             rnd.NextBytes(rgbBuffer);
-            return KeyBitmap.FromRGBColor(rgbBuffer[0], rgbBuffer[1], rgbBuffer[2]);
+            return KeyBitmap.Create.FromRgb(rgbBuffer[0], rgbBuffer[1], rgbBuffer[2]);
         }
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)

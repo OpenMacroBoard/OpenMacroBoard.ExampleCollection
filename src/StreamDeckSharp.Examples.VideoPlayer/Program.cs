@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using StreamDeckSharp.Extensions;
+using System.Linq;
 using System.Threading;
 using AForge.Video.FFMPEG;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp.Examples.CommonStuff;
 
 namespace StreamDeckSharp.Examples.VideoPlayer
 {
@@ -10,30 +12,38 @@ namespace StreamDeckSharp.Examples.VideoPlayer
     {
         static void Main(string[] args)
         {
-            using (var deck = StreamDeck.OpenDevice())
+            using(var deck = ExampleHelper.OpenBoard())
             {
                 PlayVideoAForgeFFMPEG(deck, @"C:\testvideo.mp4");
             }
         }
 
-        static void PlayVideoAForgeFFMPEG(IStreamDeck deck, string videoPath)
+        static void PlayVideoAForgeFFMPEG(IMacroBoard deck, string videoPath)
         {
             using (VideoFileReader reader = new VideoFileReader())
             {
                 reader.Open(videoPath);
                 var fr = reader.FrameRate;
                 int frameLength = (int)Math.Round(1000.0 / fr);
+                long frameNum = 0;
 
                 while (true)
                 {
                     var sw = Stopwatch.StartNew();
                     using (var frame = reader.ReadVideoFrame())
                     {
-                        if (frame == null) return;
+                        if (frame == null)
+                            return;
+
                         deck.DrawFullScreenBitmap(frame);
+
                         var wait = frameLength - (int)sw.ElapsedMilliseconds;
                         sw.Restart();
-                        if (wait > 0) Thread.Sleep(wait);
+
+                        if (wait > 0)
+                            Thread.Sleep(wait);
+
+                        frameNum++;
                     }
                 }
             }

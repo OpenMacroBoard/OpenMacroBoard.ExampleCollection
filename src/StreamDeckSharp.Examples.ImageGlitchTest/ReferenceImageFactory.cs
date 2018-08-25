@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using OpenMacroBoard.SDK;
 
 namespace StreamDeckSharp.Examples.ImageGlitchTest
 {
@@ -19,9 +20,14 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
             return GetGrayImage((byte)(key * 18));
         }
 
-        public static KeyBitmap GetStableLineImage(int key)
+        public static KeyBitmap GetStableLineImageVertical(int key)
         {
-            return GetStripeImage(key * 4);
+            return GetVerticalStripeImage(key * 4);
+        }
+
+        public static KeyBitmap GetStableLineImageHorizontal(int key)
+        {
+            return GetHorizontalStripeImage(key * 4);
         }
 
         public static KeyBitmap GetChangingFilledImage(int key)
@@ -30,13 +36,19 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
             return GetGrayImage((byte)(pos % 251));
         }
 
-        public static KeyBitmap GetChangingLineImage(int key)
+        public static KeyBitmap GetChangingLineImageVertical(int key)
         {
             IncrementPos();
-            return GetStripeImage(pos % 71);
+            return GetVerticalStripeImage(pos % 71);
         }
 
-        private static KeyBitmap GetStripeImage(int pos)
+        public static KeyBitmap GetChangingLineImageHorizontal(int key)
+        {
+            IncrementPos();
+            return GetHorizontalStripeImage(pos % 71);
+        }
+
+        private static KeyBitmap GetVerticalStripeImage(int pos)
         {
             var raw = new byte[72 * 72 * 3];
             for (int y = 0; y < 72; y++)
@@ -46,7 +58,43 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
                 raw[p + 1] = 255;
                 raw[p + 2] = 255;
             }
-            return KeyBitmap.FromRawBitmap(raw);
+            return new KeyBitmap(72, 72, raw);
+        }
+
+        private static readonly KeyBitmap rainbow = CreateRainbow();
+        private static KeyBitmap CreateRainbow()
+        {
+            var raw = new byte[72 * 72 * 3];
+            for (int y = 0; y < 72; y++)
+                for (int x = 0; x < 72; x++)
+                {
+                    var p = (y * 72 + x) * 3;
+                    byte blue = (byte)(y * 3);
+                    byte yellow = (byte)(x * 3);
+                    raw[p + 0] = blue;
+                    raw[p + 1] = yellow;
+                    raw[p + 2] = yellow;
+                }
+
+            return new KeyBitmap(72, 72, raw);
+        }
+
+        public static KeyBitmap Rainbow(int pos)
+        {
+            return rainbow;
+        }
+
+        private static KeyBitmap GetHorizontalStripeImage(int pos)
+        {
+            var raw = new byte[72 * 72 * 3];
+            for (int x = 0; x < 72; x++)
+            {
+                var p = (pos * 72 + x) * 3;
+                raw[p + 0] = 255;
+                raw[p + 1] = 255;
+                raw[p + 2] = 255;
+            }
+            return new KeyBitmap(72, 72, raw);
         }
 
         private static KeyBitmap GetGrayImage(byte b)
@@ -56,7 +104,7 @@ namespace StreamDeckSharp.Examples.ImageGlitchTest
             for (int i = 0; i < raw.Length; i++)
                 raw[i] = b;
 
-            return KeyBitmap.FromRawBitmap(raw);
+            return new KeyBitmap(72, 72, raw);
         }
     }
 }

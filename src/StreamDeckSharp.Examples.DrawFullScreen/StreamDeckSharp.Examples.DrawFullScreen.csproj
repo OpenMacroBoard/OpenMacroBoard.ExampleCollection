@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="OpenMacroBoard.SDK, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\OpenMacroBoard.SDK.0.2.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -45,20 +48,21 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\StreamDeckSharp.Extensions\StreamDeckSharp.Extensions.csproj">
-      <Project>{fc9b88c4-0cc2-4335-afbf-48d8c42dc7a5}</Project>
-      <Name>StreamDeckSharp.Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj">
-      <Project>{d06ab787-766e-4b28-89c4-8d948070eb1c}</Project>
-      <Name>StreamDeckSharp</Name>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StreamDeckSharp.Examples.CommonStuff\StreamDeckSharp.Examples.CommonStuff.csproj">
+      <Project>{26fd41d1-a64d-48f7-9e37-9a114d3dc503}</Project>
+      <Name>StreamDeckSharp.Examples.CommonStuff</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <EmbeddedResource Include="ExampleImage.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>Copy /Y "$(ProjectDir)lib\AForge.Video.FFMPEG\ffmpeg\*.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>

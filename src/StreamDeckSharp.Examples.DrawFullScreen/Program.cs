@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
-using StreamDeckSharp.Extensions;
+using System.Reflection;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp.Examples.CommonStuff;
 
 namespace StreamDeckSharp.Examples.DrawFullScreen
 {
@@ -8,11 +10,22 @@ namespace StreamDeckSharp.Examples.DrawFullScreen
     {
         static void Main(string[] args)
         {
-            using (var deck = StreamDeck.OpenDevice())
-            using (var bmp = (Bitmap)Image.FromFile(@"C:\testimage.png"))
+            using (var deck = ExampleHelper.OpenBoard())
+            using (var bmp = LoadExampleImageFromResources())
             {
                 deck.DrawFullScreenBitmap(bmp);
                 Console.ReadKey();
+            }
+        }
+
+        private static Bitmap LoadExampleImageFromResources()
+        {
+            var asm = Assembly.GetExecutingAssembly();
+            var resourceName = "StreamDeckSharp.Examples.DrawFullScreen.ExampleImage.jpg";
+
+            using (var resStream = asm.GetManifestResourceStream(resourceName))
+            {
+                return (Bitmap)Image.FromStream(resStream);
             }
         }
     }

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading;
+using OpenMacroBoard.SDK;
+using StreamDeckSharp.Examples.CommonStuff;
 
 namespace StreamDeckSharp.Examples.MemoryGame
 {
@@ -16,46 +18,46 @@ namespace StreamDeckSharp.Examples.MemoryGame
         private static readonly Random rnd = new Random();
 
         //positon of restart button
-        private static int restartKey = 7;
+        private static readonly int restartKey = 7;
 
         private static int mode = 0;
-        private static int[] openCard = new int[2];
+        private static readonly int[] openCard = new int[2];
 
         private static KeyBitmap restartIcon;
         private static KeyBitmap[] iconsActive = new KeyBitmap[7];
-        private static KeyBitmap[] iconsInactive = new KeyBitmap[7];
+        private static readonly KeyBitmap[] iconsInactive = new KeyBitmap[7];
 
         //14 slots for memory (7x2 cards)
-        private static int[] gameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
+        private static readonly int[] gameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
         private static bool[] cardVisible = new bool[14];
 
         static void Main(string[] args)
         {
-            initializeIconBitmaps();
+            InitializeIconBitmaps();
 
-            using (var s = StreamDeck.OpenDevice())
+            using (var s = ExampleHelper.OpenBoard())
             {
                 s.KeyStateChanged += StreamDeckKeyHandler;
-                startGame(s);
+                StartGame(s);
 
                 Console.WriteLine("Press any key (on the keyboard) to exit Stream Deck demo.");
                 Console.ReadKey();
             }
         }
 
-        private static void startGame(IStreamDeck deck)
+        private static void StartGame(IMacroBoard deck)
         {
             //suffle memory cards
             openCard[0] = -1;
             openCard[1] = -1;
             mode = 0;
-            suffleArray(gameState, rnd);
+            SuffleArray(gameState, rnd);
 
             for (int i = 0; i < cardVisible.Length; i++)
                 cardVisible[i] = false;
 
             //Clear all tiles (except restart key)
-            for (int i = 0; i < deck.KeyCount; i++)
+            for (int i = 0; i < deck.Keys.Count; i++)
                 if (i != restartKey)
                     deck.ClearKey(i);
 
@@ -63,7 +65,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
             deck.SetKeyBitmap(restartKey, restartIcon);
         }
 
-        private static void refreshKeyIcon(IStreamDeck deck, int cardId)
+        private static void RefreshKeyIcon(IMacroBoard deck, int cardId)
         {
             var keyId = cardId >= restartKey ? cardId + 1 : cardId;
 
@@ -80,7 +82,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
             }
         }
 
-        private static void initializeIconBitmaps()
+        private static void InitializeIconBitmaps()
         {
             restartIcon = IconLoader.LoadIconByName("restart.png", true);
             for (int i = 0; i < iconsActive.Length; i++)
@@ -91,7 +93,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
             }
         }
 
-        private static void suffleArray<T>(T[] array, Random rnd)
+        private static void SuffleArray<T>(T[] array, Random rnd)
         {
             for (int i = 0; i < array.Length; i++)
             {
@@ -109,7 +111,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
 
         private static readonly AutoResetEvent threadSleeper = new AutoResetEvent(false);
         private static readonly object closeCardLock = new object();
-        private static void closeCards(IStreamDeck deck)
+        private static void CloseCards(IMacroBoard deck)
         {
             lock (closeCardLock)
             {
@@ -120,20 +122,20 @@ namespace StreamDeckSharp.Examples.MemoryGame
                 var c2 = openCard[1];
                 openCard[0] = -1;
                 openCard[1] = -1;
-                refreshKeyIcon(deck, c1);
-                refreshKeyIcon(deck, c2);
+                RefreshKeyIcon(deck, c1);
+                RefreshKeyIcon(deck, c2);
                 mode = 0;
             }
         }
 
         private static void StreamDeckKeyHandler(object sender, KeyEventArgs e)
         {
-            var deck = sender as IStreamDeck;
-            if (deck == null) return;
+            if (!(sender is IMacroBoard deck))
+                return;
 
             if (e.Key == restartKey && e.IsDown)
             {
-                startGame(deck);
+                StartGame(deck);
                 return;
             }
 
@@ -142,7 +144,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
                 if (mode == 2)
                 {
                     threadSleeper.Set();
-                    closeCards(deck);
+                    CloseCards(deck);
                 }
 
                 var cardId = e.Key < restartKey ? e.Key : e.Key - 1;
@@ -153,7 +155,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
                         mode = 1;
                         openCard[0] = cardId;
                         cardVisible[cardId] = true;
-                        refreshKeyIcon(deck, cardId);
+                        RefreshKeyIcon(deck, cardId);
                     }
                 }
                 else if (mode == 1)
@@ -162,7 +164,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
                     {
                         openCard[1] = cardId;
                         cardVisible[cardId] = true;
-                        refreshKeyIcon(deck, cardId);
+                        RefreshKeyIcon(deck, cardId);
                         if (gameState[openCard[0]] == gameState[openCard[1]])
                         {
                             mode = 0;
@@ -170,8 +172,8 @@ namespace StreamDeckSharp.Examples.MemoryGame
                             var c2 = openCard[1];
                             openCard[0] = -1;
                             openCard[1] = -1;
-                            refreshKeyIcon(deck, c1);
-                            refreshKeyIcon(deck, c2);
+                            RefreshKeyIcon(deck, c1);
+                            RefreshKeyIcon(deck, c2);
                         }
                         else
                         {
@@ -179,7 +181,7 @@ namespace StreamDeckSharp.Examples.MemoryGame
                             sleepThread = new Thread(() =>
                             {
                                 var timeout = threadSleeper.WaitOne(2000);
-                                closeCards(deck);
+                                CloseCards(deck);
                             });
                             sleepThread.Start();
                         }
