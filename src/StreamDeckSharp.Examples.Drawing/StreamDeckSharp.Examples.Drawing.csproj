@@ -33,7 +33,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="OpenMacroBoard.SDK, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.0.2.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
+      <HintPath>..\packages\OpenMacroBoard.SDK.0.2.1\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
