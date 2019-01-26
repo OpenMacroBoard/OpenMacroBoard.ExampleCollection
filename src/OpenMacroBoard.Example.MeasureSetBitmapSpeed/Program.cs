@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.MeasureSetBitmapSpeed
+namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 {
     class Program
     {

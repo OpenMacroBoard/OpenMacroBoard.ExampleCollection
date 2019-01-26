@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using OpenMacroBoard.SDK;
+﻿using OpenMacroBoard.SDK;
 
-namespace StreamDeckSharp.Examples.ImageGlitchTest
+namespace OpenMacroBoard.Examples.ImageGlitchTest
 {
     internal static class ReferenceImageFactory
     {

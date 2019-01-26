@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Imaging;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
 using System.Threading;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.MemoryGame
+namespace OpenMacroBoard.Examples.MemoryGame
 {
     class Program
     {

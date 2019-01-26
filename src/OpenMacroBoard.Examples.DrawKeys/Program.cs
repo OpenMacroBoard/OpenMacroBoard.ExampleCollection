@@ -1,9 +1,8 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.DrawKeys
+namespace OpenMacroBoard.Examples.DrawKeys
 {
     class Program
     {

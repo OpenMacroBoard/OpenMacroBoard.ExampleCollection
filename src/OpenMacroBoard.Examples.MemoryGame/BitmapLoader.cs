@@ -6,14 +6,14 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using OpenMacroBoard.SDK;
 
-namespace StreamDeckSharp.Examples.MemoryGame
+namespace OpenMacroBoard.Examples.MemoryGame
 {
     public static class IconLoader
     {
         public static KeyBitmap LoadIconByName(string name, bool active)
         {
             var assembly = Assembly.GetExecutingAssembly();
-            var resourceName = $"StreamDeckSharp.Examples.MemoryGame.icons.{name}";
+            var resourceName = $"OpenMacroBoard.Examples.MemoryGame.icons.{name}";
 
             using (Stream stream = assembly.GetManifestResourceStream(resourceName))
             using (Bitmap bitmap = (Bitmap)Image.FromStream(stream))

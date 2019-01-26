@@ -35,10 +35,10 @@
   <ItemGroup>
     <Reference Include="AForge.Video.FFMPEG, Version=2.2.5.0, Culture=neutral, PublicKeyToken=03563089b1be05dd, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\StreamDeckSharp\src\StreamDeckSharp.Examples.DrawFullScreen\lib\AForge.Video.FFMPEG\AForge.Video.FFMPEG.dll</HintPath>
+      <HintPath>lib\AForge.Video.FFMPEG\AForge.Video.FFMPEG.dll</HintPath>
     </Reference>
     <Reference Include="OpenMacroBoard.SDK, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.0.2.2\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
+      <HintPath>..\packages\OpenMacroBoard.SDK.0.3.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

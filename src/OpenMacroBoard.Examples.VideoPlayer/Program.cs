@@ -1,11 +1,11 @@
 ﻿using AForge.Video.FFMPEG;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 using System;
 using System.Diagnostics;
 using System.Threading;
 
-namespace StreamDeckSharp.Examples.VideoPlayer
+namespace OpenMacroBoard.Examples.VideoPlayer
 {
     class Program
     {

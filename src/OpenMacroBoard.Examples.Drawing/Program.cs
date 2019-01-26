@@ -4,9 +4,9 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Text;
 using System.Windows.Controls;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.Drawing
+namespace OpenMacroBoard.Examples.Drawing
 {
     class Program
     {

@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.ImageGlitchTest
+namespace OpenMacroBoard.Examples.ImageGlitchTest
 {
     class Program
     {

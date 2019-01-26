@@ -1,9 +1,10 @@
 ﻿using OpenMacroBoard.SDK;
 using OpenMacroBoard.VirtualBoard;
+using StreamDeckSharp;
 using System;
 using System.Linq;
 
-namespace StreamDeckSharp.Examples.CommonStuff
+namespace OpenMacroBoard.Examples.CommonStuff
 {
     public static class ExampleHelper
     {

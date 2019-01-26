@@ -1,7 +1,7 @@
 ﻿using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.Austria
+namespace OpenMacroBoard.Examples.Austria
 {
     class Program
     {

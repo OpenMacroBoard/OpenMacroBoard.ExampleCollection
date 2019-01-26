@@ -1,10 +1,9 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Reflection;
 using OpenMacroBoard.SDK;
-using StreamDeckSharp.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 
-namespace StreamDeckSharp.Examples.DrawFullScreen
+namespace OpenMacroBoard.Examples.DrawFullScreen
 {
     class Program
     {
@@ -21,7 +20,7 @@ namespace StreamDeckSharp.Examples.DrawFullScreen
         private static Bitmap LoadExampleImageFromResources()
         {
             var asm = Assembly.GetExecutingAssembly();
-            var resourceName = "StreamDeckSharp.Examples.DrawFullScreen.ExampleImage.jpg";
+            var resourceName = "OpenMacroBoard.Examples.DrawFullScreen.ExampleImage.jpg";
 
             using (var resStream = asm.GetManifestResourceStream(resourceName))
             {
