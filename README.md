@@ -1,1 +1,1 @@
-## StreamDeckSharp.ExampleCollection
+## OpenMacroBoard.ExampleCollection
