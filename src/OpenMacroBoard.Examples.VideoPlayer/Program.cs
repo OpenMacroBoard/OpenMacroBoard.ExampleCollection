@@ -1,9 +1,9 @@
-﻿using AForge.Video.FFMPEG;
-using OpenMacroBoard.SDK;
+﻿using OpenMacroBoard.SDK;
 using OpenMacroBoard.Examples.CommonStuff;
 using System;
 using System.Diagnostics;
 using System.Threading;
+using Accord.Video.FFMPEG;
 
 namespace OpenMacroBoard.Examples.VideoPlayer
 {
@@ -23,7 +23,7 @@ namespace OpenMacroBoard.Examples.VideoPlayer
             {
                 reader.Open(videoPath);
                 var fr = reader.FrameRate;
-                int frameLength = (int)Math.Round(1000.0 / fr);
+                int frameLength = (int)Math.Round(1000.0 / fr.ToDouble());
                 long frameNum = 0;
 
                 while (true)
