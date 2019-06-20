@@ -15,7 +15,7 @@ namespace OpenMacroBoard.Examples.Austria
             var rowColors = new KeyBitmap[] { red, white, red };
 
             //Open the Stream Deck device
-            using (var deck = ExampleHelper.OpenBoard())
+            using (var deck = ExampleHelper.OpenStreamDeck())
             {
                 deck.SetBrightness(100);
 

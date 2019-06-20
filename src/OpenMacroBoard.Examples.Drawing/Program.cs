@@ -46,7 +46,7 @@ namespace OpenMacroBoard.Examples.Drawing
                 g.DrawString("Drawing", f, Brushes.White, new PointF(5, 20));
             });
 
-            deck.SetKeyBitmap(7, key);
+            deck.SetKeyBitmap(key);
         }
 
         static void ExampleWithWpfElement(IMacroBoard deck)
@@ -72,7 +72,7 @@ namespace OpenMacroBoard.Examples.Drawing
             c.Children.Add(t);
 
             var k = KeyBitmap.Create.FromWpfElement(kSize, kSize, c);
-            deck.SetKeyBitmap(7, k);
+            deck.SetKeyBitmap(k);
         }
 
         static void ConsoleWriteAndWait(string text)

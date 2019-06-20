@@ -11,6 +11,13 @@ namespace OpenMacroBoard.Examples.CommonStuff
 {
     public static class ExampleHelper
     {
+        private static readonly IUsbHidHardware[] virtualFallback = new[]
+        {
+            Hardware.StreamDeck,
+            Hardware.StreamDeckMini,
+            Hardware.StreamDeckXL
+        };
+
         static ExampleHelper()
         {
             Application.EnableVisualStyles();
@@ -22,23 +29,46 @@ namespace OpenMacroBoard.Examples.CommonStuff
         /// </summary>
         /// <returns></returns>
         public static IMacroBoard OpenBoard()
+            => OpenStreamDeckHardware();
+
+        public static IMacroBoard OpenStreamDeck()
+            => OpenStreamDeckHardware(Hardware.StreamDeck);
+
+        public static IMacroBoard OpenStreamDeckMini()
+            => OpenStreamDeckHardware(Hardware.StreamDeckMini);
+
+        public static IMacroBoard OpenStreamDeckXL()
+            => OpenStreamDeckHardware(Hardware.StreamDeckXL);
+
+        private static IMacroBoard OpenStreamDeckHardware(params IUsbHidHardware[] allowedHardware)
+            => SelectBoard(GetRealAndSimulatedDevices(allowedHardware)).Open();
+
+        private static IEnumerable<IDeviceReferenceHandle> GetRealAndSimulatedDevices(params IUsbHidHardware[] allowedHardware)
         {
-            var devices = StreamDeck
-                            .EnumerateDevices()
-                            .Select(d =>
-                            {
-                                return new NamedDeviceReferenceHandle(d.Open, "");
-                            })
-                            .ToList();
+            var virtualHardware = allowedHardware;
 
-            devices.Add(new VirtualDeviceHandle(Hardware.StreamDeck.Keys, "Virtual Stream Deck"));
-            devices.Add(new VirtualDeviceHandle(Hardware.StreamDeckMini.Keys, "Virtual Stream Deck Mini"));
+            if (virtualHardware == null || virtualHardware.Length < 1)
+                virtualHardware = virtualFallback;
 
-            return SelectBoard(devices).Open();
+            return StreamDeck
+                    .EnumerateDevices(allowedHardware)
+                    .Cast<IDeviceReferenceHandle>()
+                    .Union(virtualHardware.Select(GetSimulatedDeviceForHardware));
         }
+
+        private static VirtualDeviceHandle GetSimulatedDeviceForHardware(IHardware hardware)
+            => new VirtualDeviceHandle(hardware.Keys, $"Virtual {hardware.DeviceName}");
 
         public static IDeviceReferenceHandle SelectBoard(IEnumerable<IDeviceReferenceHandle> devices)
         {
+            var devList = devices.ToList();
+
+            if (devList.Count < 1)
+                return null;
+
+            if (devList.Count == 1)
+                return devList[0];
+
             var dialog = new BoardSelectorWindow(devices);
             dialog.ShowDialog();
             return dialog.SelectedDevice;

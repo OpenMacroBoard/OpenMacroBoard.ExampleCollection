@@ -1,106 +1,210 @@
 ﻿using OpenMacroBoard.SDK;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OpenMacroBoard.Examples.ImageGlitchTest
 {
-    internal static class ReferenceImageFactory
+    internal class ReferenceImageFactory
     {
-        private static int pos = 0;
-        private static void IncrementPos()
-        {
-            pos++;
-            if (pos >= 10000000) pos = 0;
-        }
+        private const double TAU = Math.PI * 2;
 
-        public static KeyBitmap GetStableFilledImage(int key)
-        {
-            return GetGrayImage((byte)(key * 18));
-        }
+        private int currentMode = 0;
 
-        public static KeyBitmap GetStableLineImageVertical(int key)
-        {
-            return GetVerticalStripeImage(key * 4);
-        }
+        private readonly int imgSize;
+        private readonly int keyCount;
+        private readonly Stopwatch stopwatch = Stopwatch.StartNew();
+        private readonly Random rnd = new Random();
 
-        public static KeyBitmap GetStableLineImageHorizontal(int key)
-        {
-            return GetHorizontalStripeImage(key * 4);
-        }
+        private Func<int, KeyBitmap> currentImageFactory = GetBlank;
 
-        public static KeyBitmap GetChangingFilledImage(int key)
-        {
-            IncrementPos();
-            return GetGrayImage((byte)(pos % 251));
-        }
+        private readonly List<Func<int, KeyBitmap>> availableImageFactories
+            = new List<Func<int, KeyBitmap>>();
 
-        public static KeyBitmap GetChangingLineImageVertical(int key)
+        public ReferenceImageFactory(int imgSize, int keyCount)
         {
-            IncrementPos();
-            return GetVerticalStripeImage(pos % 71);
-        }
+            this.imgSize = imgSize;
+            this.keyCount = keyCount;
 
-        public static KeyBitmap GetChangingLineImageHorizontal(int key)
-        {
-            IncrementPos();
-            return GetHorizontalStripeImage(pos % 71);
-        }
-
-        private static KeyBitmap GetVerticalStripeImage(int pos)
-        {
-            var raw = new byte[72 * 72 * 3];
-            for (int y = 0; y < 72; y++)
+            availableImageFactories.AddRange(new Func<int, KeyBitmap>[]
             {
-                var p = (y * 72 + pos) * 3;
+                GetBlank,
+                Rainbow,
+                GetStableFilledImage,
+                GetStableLineImageVertical,
+                GetChangingLineImageVertical,
+                GetStableLineImageHorizontal,
+                GetChangingLineImageHorizontal,
+                GetChangingFilledImage
+            });
+        }
+
+        public int ModeCount
+            => availableImageFactories.Count;
+
+        public int CurrentMode
+        {
+            get => currentMode;
+            set
+            {
+                currentMode = Mod(value, ModeCount);
+                currentImageFactory = availableImageFactories[currentMode];
+            }
+        }
+
+        public KeyBitmap GetKeyBitmap(int keyId)
+            => currentImageFactory(keyId);
+
+        private static int Mod(int x, int m)
+        {
+            int r = x % m;
+            return r < 0 ? r + m : r;
+        }
+
+        private static KeyBitmap GetBlank(int keyId)
+            => KeyBitmap.Black;
+
+        private int GetSawtoothTime(int msBase)
+        {
+            return (int)(stopwatch.ElapsedMilliseconds % msBase);
+        }
+
+        private static double LinearToSine(double linear, double min, double max)
+            => (Math.Sin(linear * TAU) / 2.0 + 0.5) * (max - min) + min;
+
+        private static double LinearToSine(double linear)
+            => LinearToSine(linear, 0, 1);
+
+        private KeyBitmap GetStableFilledImage(int key)
+            => GetGrayImage((byte)DiscreteScale(0, 256, 0, keyCount, key, (g) => Math.Pow(g, 2.2)));
+
+        private KeyBitmap GetStableLineImageVertical(int key)
+            => GetVerticalStripeImage(DiscreteScale(0, imgSize, 0, keyCount, key));
+
+        private KeyBitmap GetStableLineImageHorizontal(int key)
+            => GetHorizontalStripeImage(DiscreteScale(0, imgSize, 0, keyCount, key));
+
+        private KeyBitmap GetChangingLineImageVertical(int key)
+            => GetVerticalStripeImage(rnd.Next(0, imgSize));
+
+        private KeyBitmap GetChangingLineImageHorizontal(int key)
+            => GetHorizontalStripeImage(rnd.Next(0, imgSize));
+
+        private KeyBitmap GetChangingFilledImage(int key)
+        {
+            var limit = 3000;
+            var t = GetSawtoothTime(limit);
+            return GetGrayImage((byte)DiscreteScale(0, 255, 0, limit, t, LinearToSine));
+        }
+
+        private KeyBitmap GetVerticalStripeImage(int pos)
+        {
+            var raw = new byte[imgSize * imgSize * 3];
+
+            for (int y = 0; y < imgSize; y++)
+            {
+                var p = (y * imgSize + pos) * 3;
                 raw[p + 0] = 255;
                 raw[p + 1] = 255;
                 raw[p + 2] = 255;
             }
-            return new KeyBitmap(72, 72, raw);
+
+            return new KeyBitmap(imgSize, imgSize, raw);
         }
 
-        private static readonly KeyBitmap rainbow = CreateRainbow();
-        private static KeyBitmap CreateRainbow()
+        private KeyBitmap Rainbow(int keyId)
         {
-            var raw = new byte[72 * 72 * 3];
-            for (int y = 0; y < 72; y++)
-                for (int x = 0; x < 72; x++)
+            var raw = new byte[imgSize * imgSize * 3];
+
+            for (int y = 0; y < imgSize; y++)
+                for (int x = 0; x < imgSize; x++)
                 {
-                    var p = (y * 72 + x) * 3;
-                    byte blue = (byte)(y * 3);
-                    byte yellow = (byte)(x * 3);
+                    var p = (y * imgSize + x) * 3;
+
+                    var nX = (int)Math.Round((double)x / imgSize * 256, 0);
+                    var nY = (int)Math.Round((double)y / imgSize * 256, 0);
+
+                    if (nX > 255)
+                        nX = 255;
+
+                    if (nY > 255)
+                        nY = 255;
+
+
+                    byte blue = (byte)nY;
+                    byte yellow = (byte)nX;
                     raw[p + 0] = blue;
                     raw[p + 1] = yellow;
                     raw[p + 2] = yellow;
                 }
 
-            return new KeyBitmap(72, 72, raw);
+            return new KeyBitmap(imgSize, imgSize, raw);
         }
 
-        public static KeyBitmap Rainbow(int pos)
+        private KeyBitmap GetHorizontalStripeImage(int pos)
         {
-            return rainbow;
-        }
-
-        private static KeyBitmap GetHorizontalStripeImage(int pos)
-        {
-            var raw = new byte[72 * 72 * 3];
-            for (int x = 0; x < 72; x++)
+            var raw = new byte[imgSize * imgSize * 3];
+            for (int x = 0; x < imgSize; x++)
             {
-                var p = (pos * 72 + x) * 3;
+                var p = (pos * imgSize + x) * 3;
                 raw[p + 0] = 255;
                 raw[p + 1] = 255;
                 raw[p + 2] = 255;
             }
-            return new KeyBitmap(72, 72, raw);
+            return new KeyBitmap(imgSize, imgSize, raw);
         }
 
-        private static KeyBitmap GetGrayImage(byte b)
+        private KeyBitmap GetGrayImage(byte b)
         {
-            var raw = new byte[72 * 72 * 3];
+            var raw = new byte[imgSize * imgSize * 3];
 
             for (int i = 0; i < raw.Length; i++)
                 raw[i] = b;
 
-            return new KeyBitmap(72, 72, raw);
+            return new KeyBitmap(imgSize, imgSize, raw);
+        }
+
+        private static int DiscreteScale(
+            int minOutInclusive,
+            int maxOutExclusive,
+            int minInInclusive,
+            int maxInExclusive,
+            int value,
+            Func<double, double> transferFunction = null
+        )
+        {
+            var maxOutInclusive = maxOutExclusive - 1;
+            var maxInInclusive = maxInExclusive - 1;
+
+            if (value < minInInclusive || value > maxInInclusive)
+                throw new ArgumentOutOfRangeException();
+
+            var diffOut = maxOutInclusive - minOutInclusive;
+            var diffIn = maxInInclusive - minInInclusive;
+
+            if (diffIn <= 0 || diffOut <= 0)
+                throw new ArgumentException();
+
+            if (value <= minInInclusive)
+                return minOutInclusive;
+
+            if (value >= maxInInclusive)
+                return maxOutInclusive;
+
+            var percent = (value - minInInclusive) / (double)diffIn;
+
+            if (transferFunction != null)
+                percent = transferFunction(percent);
+
+            var outVal = (int)Math.Round(percent * diffOut, 0) + minOutInclusive;
+
+            if (outVal <= minOutInclusive)
+                return minOutInclusive;
+
+            if (outVal >= maxOutInclusive)
+                return maxOutInclusive;
+
+            return outVal;
         }
     }
 }

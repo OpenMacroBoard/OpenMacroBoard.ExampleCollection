@@ -16,18 +16,18 @@ namespace OpenMacroBoard.Examples.MemoryGame
         private static readonly int[] openCard = new int[2];
 
         private static KeyBitmap restartIcon;
-        private static KeyBitmap[] iconsActive = new KeyBitmap[7];
+        private static readonly KeyBitmap[] iconsActive = new KeyBitmap[7];
         private static readonly KeyBitmap[] iconsInactive = new KeyBitmap[7];
 
         //14 slots for memory (7x2 cards)
         private static readonly int[] gameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
-        private static bool[] cardVisible = new bool[14];
+        private static readonly bool[] cardVisible = new bool[14];
 
         static void Main()
         {
             InitializeIconBitmaps();
 
-            using (var s = ExampleHelper.OpenBoard())
+            using (var s = ExampleHelper.OpenStreamDeck())
             {
                 s.KeyStateChanged += StreamDeckKeyHandler;
                 StartGame(s);
