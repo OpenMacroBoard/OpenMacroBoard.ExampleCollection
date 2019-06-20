@@ -13,7 +13,7 @@ namespace OpenMacroBoard.Examples.Drawing
         const int kSize = 100;
 
         [STAThread]
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

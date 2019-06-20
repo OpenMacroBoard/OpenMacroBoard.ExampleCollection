@@ -9,7 +9,7 @@ namespace OpenMacroBoard.Examples.Rainbow
         private static readonly Random rnd = new Random();
         private static readonly byte[] rgbBuffer = new byte[3];
 
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

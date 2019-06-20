@@ -7,7 +7,7 @@ namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

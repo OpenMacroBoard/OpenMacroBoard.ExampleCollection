@@ -7,7 +7,7 @@ namespace OpenMacroBoard.Examples.DrawFullScreen
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             using (var bmp = LoadExampleImageFromResources())

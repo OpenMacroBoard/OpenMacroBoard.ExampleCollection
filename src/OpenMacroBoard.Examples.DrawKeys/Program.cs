@@ -6,7 +6,7 @@ namespace OpenMacroBoard.Examples.DrawKeys
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

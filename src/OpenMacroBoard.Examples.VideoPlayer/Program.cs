@@ -9,7 +9,7 @@ namespace OpenMacroBoard.Examples.VideoPlayer
 {
     class Program
     {
-        static void Main(string[] args)
+        static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

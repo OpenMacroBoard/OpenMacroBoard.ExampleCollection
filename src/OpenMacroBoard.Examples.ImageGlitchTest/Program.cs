@@ -13,7 +13,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         //=====================================
         //  Epilepsiewarning! Flicking images
         //=====================================
-        static void Main(string[] args)
+        static void Main()
         {
             //default (startup) value
             //press buttons on streamdeck to change method
