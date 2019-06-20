@@ -52,7 +52,7 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="StreamDeckSharp" Version="0.3.1" />
+        <PackageReference Include="StreamDeckSharp" Version="0.3.2" />
       </ItemGroup>
     </Otherwise>
   </Choose>
