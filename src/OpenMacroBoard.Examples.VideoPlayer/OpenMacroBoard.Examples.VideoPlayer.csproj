@@ -32,14 +32,20 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <Choose>
+    <When Condition="Exists('..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK')">
+        <ItemGroup>
+            <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+        </ItemGroup>
+    </When>
+    <Otherwise>
+        <ItemGroup>
+            <PackageReference Include="OpenMacroBoard.SDK" Version="0.3.0" />
+        </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <Reference Include="AForge.Video.FFMPEG, Version=2.2.5.0, Culture=neutral, PublicKeyToken=03563089b1be05dd, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\AForge.Video.FFMPEG\AForge.Video.FFMPEG.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMacroBoard.SDK, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.0.3.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
-    </Reference>
+    <PackageReference Include="AForge.Video.FFMPEG" Version="2.2.5" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />

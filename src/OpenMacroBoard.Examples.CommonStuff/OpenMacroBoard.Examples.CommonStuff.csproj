@@ -30,16 +30,33 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <Choose>
+    <When Condition="Exists('..\..\..\OpenMacroBoard.SDK\src')">
+        <ItemGroup>
+            <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+            <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.VirtualBoard\OpenMacroBoard.VirtualBoard.csproj" />
+        </ItemGroup>
+    </When>
+    <Otherwise>
+        <ItemGroup>
+            <PackageReference Include="OpenMacroBoard.SDK" Version="0.3.0" />
+            <PackageReference Include="OpenMacroBoard.VirtualBoard" Version="0.2.0" />
+        </ItemGroup>
+    </Otherwise>
+  </Choose>
+  <Choose>
+    <When Condition="Exists('..\..\..\StreamDeckSharp.SDK\src')">
+        <ItemGroup>
+            <ProjectReference Include="..\..\..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
+        </ItemGroup>
+    </When>
+    <Otherwise>
+        <ItemGroup>
+            <PackageReference Include="StreamDeckSharp" Version="0.3.1" />
+        </ItemGroup>
+    </Otherwise>
+  </Choose>
   <ItemGroup>
-    <Reference Include="OpenMacroBoard.SDK, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.SDK.0.3.0\lib\net40\OpenMacroBoard.SDK.dll</HintPath>
-    </Reference>
-    <Reference Include="OpenMacroBoard.VirtualBoard, Version=0.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenMacroBoard.VirtualBoard.0.2.1\lib\net40\OpenMacroBoard.VirtualBoard.dll</HintPath>
-    </Reference>
-    <Reference Include="StreamDeckSharp, Version=0.3.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\StreamDeckSharp.0.3.1\lib\net40\StreamDeckSharp.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
