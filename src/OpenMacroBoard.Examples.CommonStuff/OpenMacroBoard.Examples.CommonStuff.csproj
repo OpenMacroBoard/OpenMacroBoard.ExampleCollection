@@ -74,6 +74,7 @@
     <Compile Include="BoardSelectorWindow.Designer.cs">
       <DependentUpon>BoardSelectorWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="DeckExtensions.cs" />
     <Compile Include="ExampleHelper.cs" />
     <Compile Include="NamedDeviceReferenceHandle.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

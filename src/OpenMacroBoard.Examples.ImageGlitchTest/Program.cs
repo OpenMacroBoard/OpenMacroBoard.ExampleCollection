@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using OpenMacroBoard.SDK;
 using OpenMacroBoard.Examples.CommonStuff;
 
 namespace OpenMacroBoard.Examples.ImageGlitchTest
@@ -15,7 +14,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
 
             using (var deck = ExampleHelper.OpenBoard())
             {
-                var imgFactory = new ReferenceImageFactory(GetDeviceImageSize(deck), deck.Keys.Count);
+                var imgFactory = new ReferenceImageFactory(deck.GetDeviceImageSize(), deck.Keys.Count);
 
                 deck.KeyStateChanged += (sender, e) =>
                 {
@@ -35,18 +34,6 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 }
             }
         }
-
-        private static int GetDeviceImageSize(IMacroBoard deck)
-        {
-            if (!(deck.Keys is GridKeyPositionCollection gridKeys))
-                throw new NotSupportedException("Device is not supported");
-
-            if (gridKeys.KeyWidth != gridKeys.KeyHeight)
-                throw new NotSupportedException("Device is not supported");
-
-            return gridKeys.KeyWidth;
-        }
-
 
         private static void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
         {

@@ -12,18 +12,20 @@ namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
             using (var deck = ExampleHelper.OpenBoard())
             {
                 var sw = Stopwatch.StartNew();
+                var imgSize = deck.GetDeviceImageSize();
 
                 //Create random noise image
                 var rnd = new Random();
-                var raw = new byte[72 * 72 * 3];
+                var raw = new byte[imgSize * imgSize * 3];
                 rnd.NextBytes(raw);
-                var rndImage = new KeyBitmap(72, 72, raw);
+                var rndImage = new KeyBitmap(imgSize, imgSize, raw);
 
                 deck.ClearKeys();
 
                 //Run a few SetKeyBitmaps
                 long cnt = 50_000;
                 long i = cnt;
+
                 while (--i > 0)
                 {
                     deck.SetKeyBitmap(0, rndImage);
@@ -31,7 +33,6 @@ namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 
                 var t = sw.Elapsed.TotalSeconds;
                 var setKeyTime = t / cnt;
-
 
                 //about 0.5µs on my machine
                 Console.WriteLine((setKeyTime * 1000000.0) + " µs");
