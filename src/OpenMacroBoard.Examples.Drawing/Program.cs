@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using System.Windows.Controls;
 using OpenMacroBoard.SDK;
 using OpenMacroBoard.Examples.CommonStuff;
 
@@ -17,12 +16,7 @@ namespace OpenMacroBoard.Examples.Drawing
         {
             using (var deck = ExampleHelper.OpenBoard())
             {
-                ConsoleWriteAndWait("Press any key to run System.Drawing example");
                 ExampleWithSystemDrawing(deck);
-
-                ConsoleWriteAndWait("Press any key to run WPF FrameworkElement example");
-                ExampleWithWpfElement(deck);
-
                 ExampleHelper.WaitForKeyToExit();
             }
         }
@@ -47,38 +41,6 @@ namespace OpenMacroBoard.Examples.Drawing
             });
 
             deck.SetKeyBitmap(key);
-        }
-
-        static void ExampleWithWpfElement(IMacroBoard deck)
-        {
-            var c = new Canvas
-            {
-                Width = kSize,
-                Height = kSize,
-                Background = System.Windows.Media.Brushes.Black
-            };
-
-            var t = new TextBlock
-            {
-                Text = "WPF",
-                FontFamily = new System.Windows.Media.FontFamily("Arial"),
-                FontSize = 13,
-                Foreground = System.Windows.Media.Brushes.White
-            };
-
-            Canvas.SetLeft(t, 10);
-            Canvas.SetTop(t, 10);
-
-            c.Children.Add(t);
-
-            var k = KeyBitmap.Create.FromWpfElement(kSize, kSize, c);
-            deck.SetKeyBitmap(k);
-        }
-
-        static void ConsoleWriteAndWait(string text)
-        {
-            Console.WriteLine(text);
-            Console.ReadKey();
         }
     }
 }
