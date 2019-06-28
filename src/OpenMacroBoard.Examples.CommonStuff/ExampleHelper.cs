@@ -1,11 +1,8 @@
 ﻿using OpenMacroBoard.SDK;
-using OpenMacroBoard.VirtualBoard;
 using StreamDeckSharp;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms;
 
 namespace OpenMacroBoard.Examples.CommonStuff
 {
@@ -17,11 +14,6 @@ namespace OpenMacroBoard.Examples.CommonStuff
             Hardware.StreamDeckMini,
             Hardware.StreamDeckXL
         };
-
-        static ExampleHelper()
-        {
-            Application.EnableVisualStyles();
-        }
 
         /// <summary>
         /// Searches for a real classic stream deck or creates a virtual one.
@@ -62,6 +54,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
         public static IDeviceReferenceHandle SelectBoard(IEnumerable<IDeviceReferenceHandle> devices)
         {
             var devList = devices.ToList();
+            devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString()));
 
             if (devList.Count < 1)
                 return null;
@@ -69,9 +62,33 @@ namespace OpenMacroBoard.Examples.CommonStuff
             if (devList.Count == 1)
                 return devList[0];
 
-            var dialog = new BoardSelectorWindow(devices);
-            dialog.ShowDialog();
-            return dialog.SelectedDevice;
+            var selected = ConsoleSelect(devList);
+            Console.Clear();
+
+            return selected;
+        }
+
+        public static T ConsoleSelect<T>(IEnumerable<T> elements)
+        {
+            var list = elements.ToArray();
+            int select = -1;
+
+            for (int i = 0; i < list.Length; i++)
+                Console.WriteLine($"[{i}] {list[i]}");
+
+            Console.WriteLine();
+
+            do
+            {
+                Console.Write("Select: ");
+                var selection = Console.ReadLine();
+
+                if (int.TryParse(selection, out var id))
+                    select = id;
+
+            } while (select < 0 || select >= list.Length);
+
+            return list[select];
         }
 
         public static void WaitForKeyToExit()
