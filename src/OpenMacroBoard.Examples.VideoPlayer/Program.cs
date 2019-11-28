@@ -32,7 +32,9 @@ namespace OpenMacroBoard.Examples.VideoPlayer
                     using (var frame = reader.ReadVideoFrame())
                     {
                         if (frame == null)
+                        {
                             return;
+                        }
 
                         deck.DrawFullScreenBitmap(frame);
 
@@ -40,14 +42,18 @@ namespace OpenMacroBoard.Examples.VideoPlayer
                         sw.Restart();
 
                         if (wait > 0)
+                        {
                             Thread.Sleep(wait);
+                        }
 
                         frameNum++;
 
                         if (frameNum % 10 == 0)
                         {
                             if (Console.KeyAvailable)
+                            {
                                 return;
+                            }
                         }
                     }
                 }

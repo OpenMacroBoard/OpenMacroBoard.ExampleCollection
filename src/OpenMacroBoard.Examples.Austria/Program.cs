@@ -21,7 +21,9 @@ namespace OpenMacroBoard.Examples.Austria
 
                 //Send the bitmap informaton to the device
                 for (int i = 0; i < deck.Keys.Count; i++)
+                {
                     deck.SetKeyBitmap(i, rowColors[i / 5]);
+                }
 
                 ExampleHelper.WaitForKeyToExit();
             }

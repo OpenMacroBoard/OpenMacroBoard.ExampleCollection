@@ -40,7 +40,9 @@ namespace OpenMacroBoard.Examples.CommonStuff
             var virtualHardware = allowedHardware;
 
             if (virtualHardware == null || virtualHardware.Length < 1)
+            {
                 virtualHardware = virtualFallback;
+            }
 
             return StreamDeck
                     .EnumerateDevices(allowedHardware)
@@ -57,10 +59,14 @@ namespace OpenMacroBoard.Examples.CommonStuff
             devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString()));
 
             if (devList.Count < 1)
+            {
                 return null;
+            }
 
             if (devList.Count == 1)
+            {
                 return devList[0];
+            }
 
             var selected = ConsoleSelect(devList);
             Console.Clear();
@@ -74,7 +80,9 @@ namespace OpenMacroBoard.Examples.CommonStuff
             int select = -1;
 
             for (int i = 0; i < list.Length; i++)
+            {
                 Console.WriteLine($"[{i}] {list[i]}");
+            }
 
             Console.WriteLine();
 
@@ -84,8 +92,9 @@ namespace OpenMacroBoard.Examples.CommonStuff
                 var selection = Console.ReadLine();
 
                 if (int.TryParse(selection, out var id))
+                {
                     select = id;
-
+                }
             } while (select < 0 || select >= list.Length);
 
             return list[select];

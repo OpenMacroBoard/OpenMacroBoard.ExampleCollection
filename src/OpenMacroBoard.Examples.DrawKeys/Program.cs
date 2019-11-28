@@ -14,12 +14,16 @@ namespace OpenMacroBoard.Examples.DrawKeys
                 deck.KeyStateChanged += (s, e) =>
                 {
                     if (!e.IsDown)
+                    {
                         return;
+                    }
 
                     var newId = e.Key;
 
                     if (lastActive == newId)
+                    {
                         newId = -1;
+                    }
 
                     DrawKeys(deck, newId);
                     lastActive = newId;

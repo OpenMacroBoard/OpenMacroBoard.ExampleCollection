@@ -19,18 +19,26 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 deck.KeyStateChanged += (sender, e) =>
                 {
                     if (!e.IsDown)
+                    {
                         return;
+                    }
 
                     if (e.Key % 2 == 1)
+                    {
                         imgFactory.CurrentMode++;
+                    }
                     else
+                    {
                         imgFactory.CurrentMode--;
+                    }
                 };
 
                 while (mode == 0)
                 {
                     for (int i = 0; i < deck.Keys.Count; i++)
+                    {
                         deck.SetKeyBitmap(i, imgFactory.GetKeyBitmap(i));
+                    }
                 }
             }
         }

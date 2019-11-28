@@ -27,10 +27,14 @@ namespace OpenMacroBoard.Examples.Rainbow
         private static void Deck_KeyPressed(object sender, KeyEventArgs e)
         {
             if (!(sender is IMacroBoard d))
+            {
                 return;
+            }
 
             if (e.IsDown)
+            {
                 d.SetKeyBitmap(e.Key, GetRandomColorImage());
+            }
         }
 
         private static KeyBitmap GetRandomColorImage()

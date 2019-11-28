@@ -117,6 +117,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
             var raw = new byte[imgSize * imgSize * 3];
 
             for (int y = 0; y < imgSize; y++)
+            {
                 for (int x = 0; x < imgSize; x++)
                 {
                     var p = (y * imgSize + x) * 3;
@@ -125,11 +126,14 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                     var nY = (int)Math.Round((double)y / imgSize * 256, 0);
 
                     if (nX > 255)
+                    {
                         nX = 255;
+                    }
 
                     if (nY > 255)
+                    {
                         nY = 255;
-
+                    }
 
                     byte blue = (byte)nY;
                     byte yellow = (byte)nX;
@@ -137,6 +141,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                     raw[p + 1] = yellow;
                     raw[p + 2] = yellow;
                 }
+            }
 
             return new KeyBitmap(imgSize, imgSize, raw);
         }
@@ -159,7 +164,9 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
             var raw = new byte[imgSize * imgSize * 3];
 
             for (int i = 0; i < raw.Length; i++)
+            {
                 raw[i] = b;
+            }
 
             return new KeyBitmap(imgSize, imgSize, raw);
         }
@@ -177,32 +184,46 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
             var maxInInclusive = maxInExclusive - 1;
 
             if (value < minInInclusive || value > maxInInclusive)
+            {
                 throw new ArgumentOutOfRangeException();
+            }
 
             var diffOut = maxOutInclusive - minOutInclusive;
             var diffIn = maxInInclusive - minInInclusive;
 
             if (diffIn <= 0 || diffOut <= 0)
+            {
                 throw new ArgumentException();
+            }
 
             if (value <= minInInclusive)
+            {
                 return minOutInclusive;
+            }
 
             if (value >= maxInInclusive)
+            {
                 return maxOutInclusive;
+            }
 
             var percent = (value - minInInclusive) / (double)diffIn;
 
             if (transferFunction != null)
+            {
                 percent = transferFunction(percent);
+            }
 
             var outVal = (int)Math.Round(percent * diffOut, 0) + minOutInclusive;
 
             if (outVal <= minOutInclusive)
+            {
                 return minOutInclusive;
+            }
 
             if (outVal >= maxOutInclusive)
+            {
                 return maxOutInclusive;
+            }
 
             return outVal;
         }

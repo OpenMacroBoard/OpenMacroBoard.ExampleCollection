@@ -45,12 +45,18 @@ namespace OpenMacroBoard.Examples.MemoryGame
             SuffleArray(gameState, rnd);
 
             for (int i = 0; i < cardVisible.Length; i++)
+            {
                 cardVisible[i] = false;
+            }
 
             //Clear all tiles (except restart key)
             for (int i = 0; i < deck.Keys.Count; i++)
+            {
                 if (i != restartKey)
+                {
                     deck.ClearKey(i);
+                }
+            }
 
             //(Re-)Draw restart key image
             deck.SetKeyBitmap(restartKey, restartIcon);
@@ -63,9 +69,13 @@ namespace OpenMacroBoard.Examples.MemoryGame
             if (cardVisible[cardId])
             {
                 if ((openCard[0] == cardId || openCard[1] == cardId))
+                {
                     deck.SetKeyBitmap(keyId, iconsInactive[gameState[cardId]]);
+                }
                 else
+                {
                     deck.SetKeyBitmap(keyId, iconsActive[gameState[cardId]]);
+                }
             }
             else
             {
@@ -106,7 +116,11 @@ namespace OpenMacroBoard.Examples.MemoryGame
         {
             lock (closeCardLock)
             {
-                if (mode != 2) return;
+                if (mode != 2)
+                {
+                    return;
+                }
+
                 cardVisible[openCard[0]] = false;
                 cardVisible[openCard[1]] = false;
                 var c1 = openCard[0];
@@ -122,7 +136,9 @@ namespace OpenMacroBoard.Examples.MemoryGame
         private static void StreamDeckKeyHandler(object sender, KeyEventArgs e)
         {
             if (!(sender is IMacroBoard deck))
+            {
                 return;
+            }
 
             if (e.Key == restartKey && e.IsDown)
             {

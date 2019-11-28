@@ -22,7 +22,9 @@ namespace OpenMacroBoard.Examples.MemoryGame
                 if (!active)
                 {
                     for (int i = 0; i < raw.Length; i++)
+                    {
                         raw[i] /= 2;
+                    }
                 }
                 return new KeyBitmap(72, 72, raw);
             }
@@ -33,7 +35,9 @@ namespace OpenMacroBoard.Examples.MemoryGame
             const int iconSize = 72;
 
             if (bitmap.Width != iconSize || bitmap.Height != iconSize)
+            {
                 throw new NotSupportedException("Unsupported bitmap dimensions");
+            }
 
             BitmapData data = null;
             try
@@ -74,7 +78,9 @@ namespace OpenMacroBoard.Examples.MemoryGame
             finally
             {
                 if (data != null)
+                {
                     bitmap.UnlockBits(data);
+                }
             }
         }
     }
