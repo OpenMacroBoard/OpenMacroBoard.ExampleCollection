@@ -1,7 +1,7 @@
-﻿using System;
-using System.Threading;
+﻿using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+using System;
+using System.Threading;
 
 namespace OpenMacroBoard.Examples.MemoryGame
 {

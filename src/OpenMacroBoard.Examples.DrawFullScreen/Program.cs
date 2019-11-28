@@ -1,7 +1,7 @@
-﻿using System.Drawing;
-using System.Reflection;
+﻿using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+using System.Drawing;
+using System.Reflection;
 
 namespace OpenMacroBoard.Examples.DrawFullScreen
 {

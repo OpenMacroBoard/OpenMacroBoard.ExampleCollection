@@ -1,6 +1,6 @@
-﻿using System;
+﻿using OpenMacroBoard.Examples.CommonStuff;
+using System;
 using System.Threading;
-using OpenMacroBoard.Examples.CommonStuff;
 
 namespace OpenMacroBoard.Examples.ImageGlitchTest
 {

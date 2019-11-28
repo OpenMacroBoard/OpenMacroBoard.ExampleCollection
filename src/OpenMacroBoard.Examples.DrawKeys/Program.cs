@@ -1,6 +1,6 @@
-﻿using System.Drawing;
+﻿using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+using System.Drawing;
 
 namespace OpenMacroBoard.Examples.DrawKeys
 {

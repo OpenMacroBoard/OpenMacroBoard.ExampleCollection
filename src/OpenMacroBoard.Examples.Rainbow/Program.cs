@@ -1,6 +1,6 @@
-﻿using System;
+﻿using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+using System;
 
 namespace OpenMacroBoard.Examples.Rainbow
 {

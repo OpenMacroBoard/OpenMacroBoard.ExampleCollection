@@ -1,7 +1,7 @@
-﻿using System;
-using System.Diagnostics;
+﻿using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+using System;
+using System.Diagnostics;
 
 namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 {

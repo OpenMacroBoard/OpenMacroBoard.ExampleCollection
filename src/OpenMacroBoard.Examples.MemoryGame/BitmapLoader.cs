@@ -1,10 +1,10 @@
-﻿using System;
+﻿using OpenMacroBoard.SDK;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using OpenMacroBoard.SDK;
 
 namespace OpenMacroBoard.Examples.MemoryGame
 {

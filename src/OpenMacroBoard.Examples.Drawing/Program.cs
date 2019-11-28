@@ -1,9 +1,9 @@
-﻿using System;
+﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.SDK;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Text;
-using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
 
 namespace OpenMacroBoard.Examples.Drawing
 {

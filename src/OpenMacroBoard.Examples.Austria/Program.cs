@@ -1,5 +1,5 @@
-﻿using OpenMacroBoard.SDK;
-using OpenMacroBoard.Examples.CommonStuff;
+﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.SDK;
 
 namespace OpenMacroBoard.Examples.Austria
 {

@@ -1,9 +1,9 @@
-﻿using OpenMacroBoard.SDK;
+﻿using Accord.Video.FFMPEG;
 using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.SDK;
 using System;
 using System.Diagnostics;
 using System.Threading;
-using Accord.Video.FFMPEG;
 
 namespace OpenMacroBoard.Examples.VideoPlayer
 {
