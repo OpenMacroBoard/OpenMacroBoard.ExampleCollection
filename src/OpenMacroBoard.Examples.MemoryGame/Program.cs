@@ -5,7 +5,7 @@ using System.Threading;
 
 namespace OpenMacroBoard.Examples.MemoryGame
 {
-    class Program
+    internal class Program
     {
         private static readonly Random rnd = new Random();
 
@@ -23,7 +23,7 @@ namespace OpenMacroBoard.Examples.MemoryGame
         private static readonly int[] gameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
         private static readonly bool[] cardVisible = new bool[14];
 
-        static void Main()
+        private static void Main()
         {
             InitializeIconBitmaps();
 

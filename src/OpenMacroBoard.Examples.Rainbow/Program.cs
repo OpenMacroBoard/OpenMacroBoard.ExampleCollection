@@ -4,12 +4,12 @@ using System;
 
 namespace OpenMacroBoard.Examples.Rainbow
 {
-    class Program
+    internal class Program
     {
         private static readonly Random rnd = new Random();
         private static readonly byte[] rgbBuffer = new byte[3];
 
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

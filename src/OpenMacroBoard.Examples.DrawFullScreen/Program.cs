@@ -5,9 +5,9 @@ using System.Reflection;
 
 namespace OpenMacroBoard.Examples.DrawFullScreen
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             using (var bmp = LoadExampleImageFromResources())

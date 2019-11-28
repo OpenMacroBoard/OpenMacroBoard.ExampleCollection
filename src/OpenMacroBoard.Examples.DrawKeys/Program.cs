@@ -4,9 +4,9 @@ using System.Drawing;
 
 namespace OpenMacroBoard.Examples.DrawKeys
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {

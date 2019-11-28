@@ -4,11 +4,11 @@ using System.Threading;
 
 namespace OpenMacroBoard.Examples.ImageGlitchTest
 {
-    class Program
+    internal class Program
     {
         private static volatile int mode = 0;
 
-        static void Main()
+        private static void Main()
         {
             Console.CancelKeyPress += Console_CancelKeyPress;
 

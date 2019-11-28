@@ -7,9 +7,9 @@ using System.Threading;
 
 namespace OpenMacroBoard.Examples.VideoPlayer
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {
@@ -17,7 +17,7 @@ namespace OpenMacroBoard.Examples.VideoPlayer
             }
         }
 
-        static void PlayVideoAForgeFFMPEG(IMacroBoard deck, string videoPath)
+        private static void PlayVideoAForgeFFMPEG(IMacroBoard deck, string videoPath)
         {
             using (VideoFileReader reader = new VideoFileReader())
             {

@@ -7,12 +7,12 @@ using System.Drawing.Text;
 
 namespace OpenMacroBoard.Examples.Drawing
 {
-    class Program
+    internal class Program
     {
-        const int kSize = 100;
+        private const int kSize = 100;
 
         [STAThread]
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {
@@ -21,7 +21,7 @@ namespace OpenMacroBoard.Examples.Drawing
             }
         }
 
-        static void ExampleWithSystemDrawing(IMacroBoard deck)
+        private static void ExampleWithSystemDrawing(IMacroBoard deck)
         {
             //Create a key with lambda graphics
             var key = KeyBitmap.Create.FromGraphics(kSize, kSize, g =>

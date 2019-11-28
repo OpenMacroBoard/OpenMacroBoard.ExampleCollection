@@ -3,9 +3,9 @@ using OpenMacroBoard.SDK;
 
 namespace OpenMacroBoard.Examples.Austria
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             //This example is designed for the 5x3 (original) Stream Deck.
 

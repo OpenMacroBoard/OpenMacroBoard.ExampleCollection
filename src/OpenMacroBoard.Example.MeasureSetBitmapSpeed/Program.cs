@@ -5,9 +5,9 @@ using System.Diagnostics;
 
 namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 {
-    class Program
+    internal class Program
     {
-        static void Main()
+        private static void Main()
         {
             using (var deck = ExampleHelper.OpenBoard())
             {
