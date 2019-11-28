@@ -20,7 +20,7 @@ namespace OpenMacroBoard.Examples.Austria
                 deck.SetBrightness(100);
 
                 //Send the bitmap informaton to the device
-                for (int i = 0; i < deck.Keys.Count; i++)
+                for (var i = 0; i < deck.Keys.Count; i++)
                 {
                     deck.SetKeyBitmap(i, rowColors[i / 5]);
                 }

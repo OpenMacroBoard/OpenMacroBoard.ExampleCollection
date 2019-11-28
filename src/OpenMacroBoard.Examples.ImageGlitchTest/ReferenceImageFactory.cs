@@ -57,7 +57,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
 
         private static int Mod(int x, int m)
         {
-            int r = x % m;
+            var r = x % m;
             return r < 0 ? r + m : r;
         }
 
@@ -101,7 +101,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         {
             var raw = new byte[imgSize * imgSize * 3];
 
-            for (int y = 0; y < imgSize; y++)
+            for (var y = 0; y < imgSize; y++)
             {
                 var p = (y * imgSize + pos) * 3;
                 raw[p + 0] = 255;
@@ -116,9 +116,9 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         {
             var raw = new byte[imgSize * imgSize * 3];
 
-            for (int y = 0; y < imgSize; y++)
+            for (var y = 0; y < imgSize; y++)
             {
-                for (int x = 0; x < imgSize; x++)
+                for (var x = 0; x < imgSize; x++)
                 {
                     var p = (y * imgSize + x) * 3;
 
@@ -135,8 +135,8 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                         nY = 255;
                     }
 
-                    byte blue = (byte)nY;
-                    byte yellow = (byte)nX;
+                    var blue = (byte)nY;
+                    var yellow = (byte)nX;
                     raw[p + 0] = blue;
                     raw[p + 1] = yellow;
                     raw[p + 2] = yellow;
@@ -149,7 +149,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         private KeyBitmap GetHorizontalStripeImage(int pos)
         {
             var raw = new byte[imgSize * imgSize * 3];
-            for (int x = 0; x < imgSize; x++)
+            for (var x = 0; x < imgSize; x++)
             {
                 var p = (pos * imgSize + x) * 3;
                 raw[p + 0] = 255;
@@ -163,7 +163,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         {
             var raw = new byte[imgSize * imgSize * 3];
 
-            for (int i = 0; i < raw.Length; i++)
+            for (var i = 0; i < raw.Length; i++)
             {
                 raw[i] = b;
             }

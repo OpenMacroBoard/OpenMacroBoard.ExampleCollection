@@ -2,7 +2,6 @@
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 
@@ -15,13 +14,13 @@ namespace OpenMacroBoard.Examples.MemoryGame
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = $"OpenMacroBoard.Examples.MemoryGame.icons.{name}";
 
-            using (Stream stream = assembly.GetManifestResourceStream(resourceName))
-            using (Bitmap bitmap = (Bitmap)Image.FromStream(stream))
+            using (var stream = assembly.GetManifestResourceStream(resourceName))
+            using (var bitmap = (Bitmap)Image.FromStream(stream))
             {
                 var raw = ConvertBitmapToRgb24(bitmap);
                 if (!active)
                 {
-                    for (int i = 0; i < raw.Length; i++)
+                    for (var i = 0; i < raw.Length; i++)
                     {
                         raw[i] /= 2;
                     }
@@ -57,12 +56,12 @@ namespace OpenMacroBoard.Examples.MemoryGame
                     Marshal.Copy(data.Scan0, tempRgb32, 0, tempRgb32.Length);
 
                     var len = iconSize * iconSize;
-                    for (int i = 0; i < len; i++)
+                    for (var i = 0; i < len; i++)
                     {
                         var pt = i * 3;
                         var ps = i * 4;
 
-                        double alpha = (double)tempRgb32[ps + 3] / 255f;
+                        var alpha = (double)tempRgb32[ps + 3] / 255f;
                         managedRGB[pt + 0] = (byte)Math.Round(tempRgb32[ps + 0] * alpha);
                         managedRGB[pt + 1] = (byte)Math.Round(tempRgb32[ps + 1] * alpha);
                         managedRGB[pt + 2] = (byte)Math.Round(tempRgb32[ps + 2] * alpha);

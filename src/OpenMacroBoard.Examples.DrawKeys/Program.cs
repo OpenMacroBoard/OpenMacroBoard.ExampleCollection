@@ -40,7 +40,7 @@ namespace OpenMacroBoard.Examples.DrawKeys
             var f = new Font("Arial", 20);
             var fb = new Font("Arial", 60, FontStyle.Bold);
 
-            for (int kId = 0; kId < deck.Keys.Count; kId++)
+            for (var kId = 0; kId < deck.Keys.Count; kId++)
             {
                 var font = f;
                 var origin = new PointF(30, 33);

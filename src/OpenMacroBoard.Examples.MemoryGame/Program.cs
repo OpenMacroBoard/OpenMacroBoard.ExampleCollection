@@ -44,13 +44,13 @@ namespace OpenMacroBoard.Examples.MemoryGame
             mode = 0;
             SuffleArray(gameState, rnd);
 
-            for (int i = 0; i < cardVisible.Length; i++)
+            for (var i = 0; i < cardVisible.Length; i++)
             {
                 cardVisible[i] = false;
             }
 
             //Clear all tiles (except restart key)
-            for (int i = 0; i < deck.Keys.Count; i++)
+            for (var i = 0; i < deck.Keys.Count; i++)
             {
                 if (i != restartKey)
                 {
@@ -86,7 +86,7 @@ namespace OpenMacroBoard.Examples.MemoryGame
         private static void InitializeIconBitmaps()
         {
             restartIcon = IconLoader.LoadIconByName("restart.png", true);
-            for (int i = 0; i < iconsActive.Length; i++)
+            for (var i = 0; i < iconsActive.Length; i++)
             {
                 var name = $"card{i}.png";
                 iconsActive[i] = IconLoader.LoadIconByName(name, true);
@@ -96,12 +96,12 @@ namespace OpenMacroBoard.Examples.MemoryGame
 
         private static void SuffleArray<T>(T[] array, Random rnd)
         {
-            for (int i = 0; i < array.Length; i++)
+            for (var i = 0; i < array.Length; i++)
             {
-                int pick = rnd.Next(array.Length - i) + i;
+                var pick = rnd.Next(array.Length - i) + i;
 
                 //Swap elements
-                T tmp = array[i];
+                var tmp = array[i];
                 array[i] = array[pick];
                 array[pick] = tmp;
             }

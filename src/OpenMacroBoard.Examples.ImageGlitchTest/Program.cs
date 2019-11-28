@@ -35,7 +35,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
 
                 while (mode == 0)
                 {
-                    for (int i = 0; i < deck.Keys.Count; i++)
+                    for (var i = 0; i < deck.Keys.Count; i++)
                     {
                         deck.SetKeyBitmap(i, imgFactory.GetKeyBitmap(i));
                     }

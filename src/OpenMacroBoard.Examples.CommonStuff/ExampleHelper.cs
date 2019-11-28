@@ -77,9 +77,9 @@ namespace OpenMacroBoard.Examples.CommonStuff
         public static T ConsoleSelect<T>(IEnumerable<T> elements)
         {
             var list = elements.ToArray();
-            int select = -1;
+            var select = -1;
 
-            for (int i = 0; i < list.Length; i++)
+            for (var i = 0; i < list.Length; i++)
             {
                 Console.WriteLine($"[{i}] {list[i]}");
             }

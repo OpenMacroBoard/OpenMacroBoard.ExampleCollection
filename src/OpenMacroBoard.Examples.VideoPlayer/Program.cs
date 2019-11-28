@@ -19,11 +19,11 @@ namespace OpenMacroBoard.Examples.VideoPlayer
 
         private static void PlayVideoAForgeFFMPEG(IMacroBoard deck, string videoPath)
         {
-            using (VideoFileReader reader = new VideoFileReader())
+            using (var reader = new VideoFileReader())
             {
                 reader.Open(videoPath);
                 var fr = reader.FrameRate;
-                int frameLength = (int)Math.Round(1000.0 / fr.ToDouble());
+                var frameLength = (int)Math.Round(1000.0 / fr.ToDouble());
                 long frameNum = 0;
 
                 while (true)

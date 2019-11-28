@@ -24,7 +24,7 @@ namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
 
                 //Run a few SetKeyBitmaps
                 long cnt = 50_000;
-                long i = cnt;
+                var i = cnt;
 
                 while (--i > 0)
                 {
