@@ -32,27 +32,6 @@ namespace OpenMacroBoard.Examples.CommonStuff
         public static IMacroBoard OpenStreamDeckXL()
             => OpenStreamDeckHardware(Hardware.StreamDeckXL);
 
-        private static IMacroBoard OpenStreamDeckHardware(params IUsbHidHardware[] allowedHardware)
-            => SelectBoard(GetRealAndSimulatedDevices(allowedHardware)).Open();
-
-        private static IEnumerable<IDeviceReferenceHandle> GetRealAndSimulatedDevices(params IUsbHidHardware[] allowedHardware)
-        {
-            var virtualHardware = allowedHardware;
-
-            if (virtualHardware == null || virtualHardware.Length < 1)
-            {
-                virtualHardware = virtualFallback;
-            }
-
-            return StreamDeck
-                    .EnumerateDevices(allowedHardware)
-                    .Cast<IDeviceReferenceHandle>()
-                    .Union(virtualHardware.Select(GetSimulatedDeviceForHardware));
-        }
-
-        private static VirtualDeviceHandle GetSimulatedDeviceForHardware(IHardware hardware)
-            => new VirtualDeviceHandle(hardware.Keys, $"Virtual {hardware.DeviceName}");
-
         public static IDeviceReferenceHandle SelectBoard(IEnumerable<IDeviceReferenceHandle> devices)
         {
             var devList = devices.ToList();
@@ -104,6 +83,41 @@ namespace OpenMacroBoard.Examples.CommonStuff
         {
             Console.WriteLine("Please press any key (on PC keyboard) to exit this example.");
             Console.ReadKey();
+        }
+
+        private static VirtualDeviceHandle GetSimulatedDeviceForHardware(IHardware hardware)
+            => new VirtualDeviceHandle(hardware.Keys, $"Virtual {hardware.DeviceName}");
+
+        private static IMacroBoard OpenStreamDeckHardware(params IUsbHidHardware[] allowedHardware)
+            => SelectBoard(GetRealAndSimulatedDevices(allowedHardware)).Open();
+
+        private static IEnumerable<IDeviceReferenceHandle> GetRealAndSimulatedDevices(params IUsbHidHardware[] allowedHardware)
+        {
+            var virtualHardware = allowedHardware;
+
+            if (virtualHardware == null || virtualHardware.Length < 1)
+            {
+                virtualHardware = virtualFallback;
+            }
+
+            return Enumerable.Empty<IDeviceReferenceHandle>()
+                .Concat(GetStreamDecks(true, allowedHardware))
+                .Concat(GetStreamDecks(false, allowedHardware))
+                .Concat(virtualHardware.Select(GetSimulatedDeviceForHardware));
+        }
+
+        private static IEnumerable<IDeviceReferenceHandle> GetStreamDecks(bool cached, params IUsbHidHardware[] allowedHardware)
+        {
+            var postfix = cached ? "default / cached" : "synced / not cached";
+
+            return StreamDeck
+                        .EnumerateDevices(allowedHardware)
+                        .Select(d =>
+                        {
+                            d.UseWriteCache = cached;
+                            return new CustomNameDeviceHandle($"{d.DeviceName} ({postfix})", d);
+                        })
+                        .Cast<IDeviceReferenceHandle>();
         }
     }
 }
