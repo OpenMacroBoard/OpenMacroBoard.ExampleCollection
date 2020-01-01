@@ -9,11 +9,20 @@ namespace OpenMacroBoard.Examples.VideoPlayer
 {
     internal class Program
     {
-        private static void Main()
+        private static void Main(string[] args)
         {
+            if (args == null || args.Length < 0)
+            {
+                Console.WriteLine("Provide a path to a video as the first commandline parameter");
+                return;
+            }
+
+            // Set your video path here or as commandline argument
+            var videoPath = args[0];
+
             using (var deck = ExampleHelper.OpenBoard())
             {
-                PlayVideoAForgeFFMPEG(deck, @"C:\testvideo.mp4");
+                PlayVideoAForgeFFMPEG(deck, videoPath);
             }
         }
 
