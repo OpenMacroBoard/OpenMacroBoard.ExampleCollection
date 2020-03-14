@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net40</TargetFramework>
+    <LangVersion>8</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="icons\check.png" />
+    <None Remove="icons\cross.png" />
+    <None Remove="icons\flag.png" />
+    <None Remove="icons\mine.png" />
+    <None Remove="icons\unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="icons\check.png" />
+    <EmbeddedResource Include="icons\cross.png" />
+    <EmbeddedResource Include="icons\flag.png" />
+    <EmbeddedResource Include="icons\mine.png" />
+    <EmbeddedResource Include="icons\unknown.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="System.ValueTuple" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+    <ProjectReference Include="..\OpenMacroBoard.Examples.CommonStuff\OpenMacroBoard.Examples.CommonStuff.csproj" />
+  </ItemGroup>
+
+</Project>
