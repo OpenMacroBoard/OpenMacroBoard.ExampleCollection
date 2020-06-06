@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -23,11 +23,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="StreamDeckSharp" Version="2.0.0" />
     <PackageReference Include="System.ValueTuple" Version="4.5.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
     <ProjectReference Include="..\OpenMacroBoard.Examples.CommonStuff\OpenMacroBoard.Examples.CommonStuff.csproj" />
   </ItemGroup>
 
