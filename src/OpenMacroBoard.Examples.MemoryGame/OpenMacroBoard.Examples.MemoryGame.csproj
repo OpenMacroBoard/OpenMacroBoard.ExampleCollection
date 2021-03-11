@@ -24,7 +24,7 @@
     <EmbeddedResource Include="icons\restart.png" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="OpenMacroBoard.SDK" Version="2.0.0" />
+    <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OpenMacroBoard.Examples.CommonStuff\OpenMacroBoard.Examples.CommonStuff.csproj" />

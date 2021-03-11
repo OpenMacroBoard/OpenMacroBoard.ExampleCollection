@@ -3,8 +3,8 @@
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OpenMacroBoard.SDK" Version="2.0.0" />
-    <PackageReference Include="OpenMacroBoard.VirtualBoard" Version="2.0.0" />
-    <PackageReference Include="StreamDeckSharp" Version="2.0.0" />
+    <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
+    <PackageReference Include="OpenMacroBoard.VirtualBoard" Version="4.0.0" />
+    <PackageReference Include="StreamDeckSharp" Version="3.0.0" />
   </ItemGroup>
 </Project>
