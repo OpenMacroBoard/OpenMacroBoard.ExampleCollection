@@ -1,10 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-  </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
-    <PackageReference Include="OpenMacroBoard.VirtualBoard" Version="4.0.0" />
-    <PackageReference Include="StreamDeckSharp" Version="3.0.0" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+	</PropertyGroup>
+
+	<Import Project="..\commonrefs.targets" />
 </Project>

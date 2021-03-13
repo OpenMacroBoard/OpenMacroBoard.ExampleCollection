@@ -1,0 +1,6 @@
+<Project Sdk="Microsoft.NET.Sdk">
+    <Import Project="commonrefs.targets" />
+    <ItemGroup>
+        <ProjectReference Include="..\OpenMacroBoard.Examples.CommonStuff\OpenMacroBoard.Examples.CommonStuff.csproj" />
+    </ItemGroup>
+</Project>
