@@ -196,16 +196,6 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 throw new ArgumentException();
             }
 
-            if (value <= minInInclusive)
-            {
-                return minOutInclusive;
-            }
-
-            if (value >= maxInInclusive)
-            {
-                return maxOutInclusive;
-            }
-
             var percent = (value - minInInclusive) / (double)diffIn;
 
             if (transferFunction != null)
