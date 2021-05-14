@@ -3,6 +3,7 @@ using StreamDeckSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 
 namespace OpenMacroBoard.Examples.CommonStuff
 {
@@ -14,6 +15,20 @@ namespace OpenMacroBoard.Examples.CommonStuff
             Hardware.StreamDeckMini,
             Hardware.StreamDeckXL
         };
+
+        private static int ctrlCCnt = 0;
+
+        static ExampleHelper()
+        {
+            Console.CancelKeyPress += (s, e) =>
+            {
+                e.Cancel = true;
+                Interlocked.Increment(ref ctrlCCnt);
+            };
+        }
+
+        public static int CtrlCCount => ctrlCCnt;
+        public static bool CtrlCWasPressed => ctrlCCnt > 0;
 
         /// <summary>
         /// Searches for a real classic stream deck or creates a virtual one.
@@ -74,7 +89,8 @@ namespace OpenMacroBoard.Examples.CommonStuff
                 {
                     select = id;
                 }
-            } while (select < 0 || select >= list.Length);
+            }
+            while (select < 0 || select >= list.Length);
 
             return list[select];
         }
