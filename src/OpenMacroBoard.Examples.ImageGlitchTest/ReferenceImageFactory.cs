@@ -16,7 +16,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         private readonly Stopwatch stopwatch = Stopwatch.StartNew();
         private readonly Random rnd = new Random();
 
-        private Func<int, KeyBitmap> currentImageFactory = GetBlank;
+        private Func<int, KeyBitmap> currentImageFactory;
 
         private readonly List<Func<int, KeyBitmap>> availableImageFactories
             = new List<Func<int, KeyBitmap>>();
@@ -37,6 +37,8 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 GetChangingLineImageHorizontal,
                 GetChangingFilledImage
             });
+
+            currentImageFactory = availableImageFactories[0];
         }
 
         public int ModeCount
