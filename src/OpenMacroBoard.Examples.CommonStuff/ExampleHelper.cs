@@ -39,7 +39,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
             => OpenStreamDeckHardware();
 
         public static IMacroBoard OpenStreamDeck()
-            => OpenStreamDeckHardware(Hardware.StreamDeck);
+            => OpenStreamDeckHardware(Hardware.StreamDeck, Hardware.StreamDeckRev2, Hardware.StreamDeckMK2);
 
         public static IMacroBoard OpenStreamDeckMini()
             => OpenStreamDeckHardware(Hardware.StreamDeckMini);
