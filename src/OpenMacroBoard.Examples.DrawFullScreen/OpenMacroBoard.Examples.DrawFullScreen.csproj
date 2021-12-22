@@ -1,13 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-		<TargetFramework>net472</TargetFramework>
-	</PropertyGroup>
-	<ItemGroup>
-		<None Remove="ExampleImage.jpg" />
-	</ItemGroup>
-	<ItemGroup>
-		<EmbeddedResource Include="ExampleImage.jpg" />
-	</ItemGroup>
-	<Import Project="..\examplerefs.targets" />
+  <Import Project="..\examplerefs.targets" />
+  <ItemGroup>
+    <None Remove="ExampleImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ExampleImage.jpg" />
+  </ItemGroup>
 </Project>
