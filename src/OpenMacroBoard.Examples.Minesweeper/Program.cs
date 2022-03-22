@@ -1,5 +1,4 @@
 using OpenMacroBoard.Examples.CommonStuff;
-using OpenMacroBoard.SDK;
 
 namespace OpenMacroBoard.Examples.Minesweeper
 {
