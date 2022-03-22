@@ -1,4 +1,4 @@
-﻿namespace OpenMacroBoard.Examples.XorFlip
+namespace OpenMacroBoard.Examples.XorFlip
 {
     public enum XorFlipButtonState
     {

@@ -1,4 +1,4 @@
-﻿using OpenMacroBoard.SDK;
+using OpenMacroBoard.SDK;
 using System;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -14,19 +14,20 @@ namespace OpenMacroBoard.Examples.MemoryGame
             var assembly = Assembly.GetExecutingAssembly();
             var resourceName = $"OpenMacroBoard.Examples.MemoryGame.icons.{name}";
 
-            using (var stream = assembly.GetManifestResourceStream(resourceName))
-            using (var bitmap = (Bitmap)Image.FromStream(stream))
+            using var stream = assembly.GetManifestResourceStream(resourceName);
+            using var bitmap = (Bitmap)Image.FromStream(stream);
+
+            var raw = ConvertBitmapToRgb24(bitmap);
+
+            if (!active)
             {
-                var raw = ConvertBitmapToRgb24(bitmap);
-                if (!active)
+                for (var i = 0; i < raw.Length; i++)
                 {
-                    for (var i = 0; i < raw.Length; i++)
-                    {
-                        raw[i] /= 2;
-                    }
+                    raw[i] /= 2;
                 }
-                return new KeyBitmap(72, 72, raw);
             }
+
+            return KeyBitmap.FromBgr24Array(72, 72, raw);
         }
 
         private static byte[] ConvertBitmapToRgb24(Bitmap bitmap)
@@ -41,7 +42,7 @@ namespace OpenMacroBoard.Examples.MemoryGame
             BitmapData data = null;
             try
             {
-                data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), System.Drawing.Imaging.ImageLockMode.ReadOnly, bitmap.PixelFormat);
+                data = bitmap.LockBits(new Rectangle(0, 0, bitmap.Width, bitmap.Height), ImageLockMode.ReadOnly, bitmap.PixelFormat);
 
                 var managedRGB = new byte[iconSize * iconSize * 3];
 
@@ -55,7 +56,8 @@ namespace OpenMacroBoard.Examples.MemoryGame
                     var tempRgb32 = new byte[iconSize * iconSize * 4];
                     Marshal.Copy(data.Scan0, tempRgb32, 0, tempRgb32.Length);
 
-                    var len = iconSize * iconSize;
+                    const int len = iconSize * iconSize;
+
                     for (var i = 0; i < len; i++)
                     {
                         var pt = i * 3;

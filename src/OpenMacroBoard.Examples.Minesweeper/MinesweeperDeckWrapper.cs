@@ -7,11 +7,9 @@ namespace OpenMacroBoard.Examples.Minesweeper
 {
     internal sealed class MinesweeperDeckWrapper : IDisposable
     {
-        private readonly GridKeyPositionCollection keyGrid;
         private readonly IMacroBoard deck;
         private readonly IMinesweeperIconSet iconSet;
 
-        private readonly int keyCount;
         private readonly int shortPressDurationMs;
 
         private readonly Stopwatch stopwatch = Stopwatch.StartNew();
@@ -26,14 +24,11 @@ namespace OpenMacroBoard.Examples.Minesweeper
             int shortPressDurationMs
         )
         {
-            keyGrid = (deck.Keys as GridKeyPositionCollection) ?? throw new InvalidOperationException("Deck not supported");
-
             this.deck = deck;
             this.iconSet = iconSet;
             this.shortPressDurationMs = shortPressDurationMs;
 
-            keyCount = keyGrid.KeyCountX * keyGrid.KeyCountY;
-            downTimestamp = new long[keyCount];
+            downTimestamp = new long[deck.Keys.Count];
 
             SetupMinefield();
 
@@ -41,9 +36,15 @@ namespace OpenMacroBoard.Examples.Minesweeper
             deck.KeyStateChanged += Deck_KeyStateChanged;
         }
 
+        public void Dispose()
+        {
+            deck.KeyStateChanged -= Deck_KeyStateChanged;
+            bgTimer.Dispose();
+        }
+
         private void SetupMinefield()
         {
-            game = new MinesweeperGame(keyGrid.KeyCountX, keyGrid.KeyCountY);
+            game = new MinesweeperGame(deck.Keys.CountX, deck.Keys.CountY);
             SetupMines();
             UpdateField();
         }
@@ -55,7 +56,7 @@ namespace OpenMacroBoard.Examples.Minesweeper
             var setMines = 3;
             while (setMines > 0)
             {
-                var pos = random.Next(keyCount);
+                var pos = random.Next(deck.Keys.Count);
                 (var x, var y) = CoordsFromPos(pos);
 
                 if (game.SetMine(x, y))
@@ -69,7 +70,7 @@ namespace OpenMacroBoard.Examples.Minesweeper
         {
             var t = stopwatch.ElapsedMilliseconds;
 
-            for (var i = 0; i < keyCount; i++)
+            for (var i = 0; i < deck.Keys.Count; i++)
             {
                 var dt = downTimestamp[i];
 
@@ -104,11 +105,9 @@ namespace OpenMacroBoard.Examples.Minesweeper
             }
         }
 
-
-
         private void UpdateField()
         {
-            for (var i = 0; i < keyCount; i++)
+            for (var i = 0; i < deck.Keys.Count; i++)
             {
                 UpdateFieldBitmap(i);
             }
@@ -188,15 +187,9 @@ namespace OpenMacroBoard.Examples.Minesweeper
             UpdateField();
         }
 
-        private (int x, int y) CoordsFromPos(int pos)
+        private (int X, int Y) CoordsFromPos(int pos)
         {
-            return (pos % keyGrid.KeyCountX, pos / keyGrid.KeyCountX);
-        }
-
-        public void Dispose()
-        {
-            deck.KeyStateChanged -= Deck_KeyStateChanged;
-            bgTimer.Dispose();
+            return (pos % deck.Keys.CountX, pos / deck.Keys.CountX);
         }
     }
 }

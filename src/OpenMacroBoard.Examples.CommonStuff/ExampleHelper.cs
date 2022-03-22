@@ -1,25 +1,22 @@
-﻿using OpenMacroBoard.SDK;
+using OpenMacroBoard.SDK;
+using OpenMacroBoard.SocketIO;
 using StreamDeckSharp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reactive.Linq;
 using System.Threading;
 
 namespace OpenMacroBoard.Examples.CommonStuff
 {
     public static class ExampleHelper
     {
-        private static readonly IUsbHidHardware[] virtualFallback = new[]
-        {
-            Hardware.StreamDeck,
-            Hardware.StreamDeckMini,
-            Hardware.StreamDeckXL
-        };
-
         private static int ctrlCCnt = 0;
 
         static ExampleHelper()
         {
+            ImageSharpWarmupHelper.RunWarmup();
+
             Console.CancelKeyPress += (s, e) =>
             {
                 e.Cancel = true;
@@ -30,24 +27,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
         public static int CtrlCCount => ctrlCCnt;
         public static bool CtrlCWasPressed => ctrlCCnt > 0;
 
-        /// <summary>
-        /// Searches for a real classic stream deck or creates a virtual one.
-        /// All examples are designed for the 5x3 classic StreamDeck.
-        /// </summary>
-        /// <returns></returns>
-        public static IMacroBoard OpenBoard()
-            => OpenStreamDeckHardware();
-
-        public static IMacroBoard OpenStreamDeck()
-            => OpenStreamDeckHardware(Hardware.StreamDeck, Hardware.StreamDeckRev2, Hardware.StreamDeckMK2);
-
-        public static IMacroBoard OpenStreamDeckMini()
-            => OpenStreamDeckHardware(Hardware.StreamDeckMini);
-
-        public static IMacroBoard OpenStreamDeckXL()
-            => OpenStreamDeckHardware(Hardware.StreamDeckXL);
-
-        public static IDeviceReferenceHandle SelectBoard(IEnumerable<IDeviceReferenceHandle> devices)
+        public static IDeviceReference SelectBoard(IEnumerable<IDeviceReference> devices)
         {
             var devList = devices.ToList();
             devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString()));
@@ -101,39 +81,86 @@ namespace OpenMacroBoard.Examples.CommonStuff
             Console.ReadKey();
         }
 
-        private static VirtualDeviceHandle GetSimulatedDeviceForHardware(IHardware hardware)
-            => new VirtualDeviceHandle(hardware.Keys, $"Virtual {hardware.DeviceName}");
-
-        private static IMacroBoard OpenStreamDeckHardware(params IUsbHidHardware[] allowedHardware)
-            => SelectBoard(GetRealAndSimulatedDevices(allowedHardware)).Open();
-
-        private static IEnumerable<IDeviceReferenceHandle> GetRealAndSimulatedDevices(params IUsbHidHardware[] allowedHardware)
+        public static IMacroBoard OpenBoard(Predicate<IDeviceReference> boardSelector)
         {
-            var virtualHardware = allowedHardware;
+            using var ctx = DeviceContext.Create()
+                .AddListener<StreamDeckListener>()
+                .AddListener<SocketIOBoardListener>()
+                ;
 
-            if (virtualHardware == null || virtualHardware.Length < 1)
+            var sync = new object();
+            IReadOnlyList<IKnownDevice> deviceList = new List<IKnownDevice>();
+
+            void UpdateAndRedraw()
             {
-                virtualHardware = virtualFallback;
+                lock (sync)
+                {
+                    deviceList = ctx.KnownDevices.Where(d => boardSelector(d)).ToList();
+                    RedrawDeviceList(deviceList);
+                }
             }
 
-            return Enumerable.Empty<IDeviceReferenceHandle>()
-                .Concat(GetStreamDecks(true, allowedHardware))
-                .Concat(GetStreamDecks(false, allowedHardware))
-                .Concat(virtualHardware.Select(GetSimulatedDeviceForHardware));
+            using var subscription = ctx.DeviceStateReports.Subscribe(_ => UpdateAndRedraw());
+
+            while (true)
+            {
+                UpdateAndRedraw();
+                var selection = Console.ReadLine();
+
+                var refcopyDeviceList = deviceList;
+
+                if (int.TryParse(selection, out var id))
+                {
+                    if (id >= 0 && id < refcopyDeviceList.Count)
+                    {
+                        Console.Clear();
+
+                        var device = refcopyDeviceList[id]
+                            .Open()
+                            .WithDisconnectReplay()
+                            .WithButtonPressEffect();
+
+                        device.SetBrightness(100);
+                        return device;
+                    }
+                }
+            };
         }
 
-        private static IEnumerable<IDeviceReferenceHandle> GetStreamDecks(bool cached, params IUsbHidHardware[] allowedHardware)
+        public static IMacroBoard OpenBoard()
         {
-            var postfix = cached ? "default / cached" : "synced / not cached";
+            return OpenBoard(x => true);
+        }
 
-            return StreamDeck
-                        .EnumerateDevices(allowedHardware)
-                        .Select(d =>
-                        {
-                            d.UseWriteCache = cached;
-                            return new CustomNameDeviceHandle($"{d.DeviceName} ({postfix})", d);
-                        })
-                        .Cast<IDeviceReferenceHandle>();
+        private static void RedrawDeviceList(IReadOnlyList<IKnownDevice> devices)
+        {
+            // Alternative to Console.Clear without flicker.
+            Console.SetCursorPosition(0, 0);
+
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine();
+            Console.WriteLine("Devices:");
+
+            if (devices.Count == 0)
+            {
+                Console.WriteLine("   (none)");
+            }
+            else
+            {
+                for (int i = 0; i < devices.Count; i++)
+                {
+                    var d = devices[i];
+                    Console.WriteLine($"{i,3}:  [{(d.Connected ? 'X' : ' ')}] {d.DeviceName}");
+                }
+            }
+
+            Console.SetCursorPosition(0, 0);
+
+            var text = "Select a device: ";
+            Console.Write(text.PadRight(Console.BufferWidth - 1));
+            Console.SetCursorPosition(0, 0);
+            Console.Write(text);
         }
     }
 }

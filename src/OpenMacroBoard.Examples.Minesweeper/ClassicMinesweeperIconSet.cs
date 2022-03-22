@@ -1,5 +1,10 @@
 using OpenMacroBoard.SDK;
-using System.Drawing;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
+using System.Globalization;
 using System.Reflection;
 
 namespace OpenMacroBoard.Examples.Minesweeper
@@ -7,14 +12,12 @@ namespace OpenMacroBoard.Examples.Minesweeper
     internal class ClassicMinesweeperIconSet : IMinesweeperIconSet
     {
         private readonly KeyBitmap[] numberBitmaps = new KeyBitmap[9];
-        private readonly Font font = new Font(FontFamily.GenericMonospace, 55);
+        private readonly Font font = SystemFonts.CreateFont("Arial", 55);
 
         public ClassicMinesweeperIconSet()
         {
             InitializeBitmaps();
         }
-
-        public KeyBitmap this[int number] => numberBitmaps[number];
 
         public KeyBitmap ExplodedMine { get; } = LoadExampleImageFromResources("mine.png");
         public KeyBitmap DefusedMine { get; } = LoadExampleImageFromResources("check.png");
@@ -22,28 +25,7 @@ namespace OpenMacroBoard.Examples.Minesweeper
         public KeyBitmap Flag { get; } = LoadExampleImageFromResources("flag.png");
         public KeyBitmap HiddenCell { get; } = LoadExampleImageFromResources("unknown.png");
 
-        private void InitializeBitmaps()
-        {
-            for (var i = 0; i < numberBitmaps.Length; i++)
-            {
-                numberBitmaps[i] = KeyBitmap.Create.FromGraphics(
-                    96,
-                    96,
-                    g =>
-                    {
-                        g.DrawString(
-                            i.ToString(),
-                            font,
-                            Brushes.White,
-                            10,
-                            10
-                        );
-                    }
-                );
-            }
-
-            numberBitmaps[0] = KeyBitmap.Black;
-        }
+        public KeyBitmap this[int number] => numberBitmaps[number];
 
         private static KeyBitmap LoadExampleImageFromResources(string name)
         {
@@ -51,9 +33,28 @@ namespace OpenMacroBoard.Examples.Minesweeper
             var resourceName = $"OpenMacroBoard.Examples.Minesweeper.icons.{name}";
 
             using var resStream = asm.GetManifestResourceStream(resourceName);
-            using var bmp = (Bitmap)Image.FromStream(resStream);
+            using var bmp = Image.Load(resStream);
 
-            return KeyBitmap.Create.FromBitmap(bmp);
+            return KeyBitmap.Create.FromImageSharpImage(bmp);
+        }
+
+        private void InitializeBitmaps()
+        {
+            for (var i = 0; i < numberBitmaps.Length; i++)
+            {
+                using var keyImage = new Image<Bgr24>(96, 96);
+
+                keyImage.Mutate(x => x.DrawText(
+                    i.ToString(CultureInfo.InvariantCulture),
+                    font,
+                    Color.White,
+                    new PointF(30, 18)
+                ));
+
+                numberBitmaps[i] = KeyBitmap.Create.FromImageSharpImage(keyImage);
+            }
+
+            numberBitmaps[0] = KeyBitmap.Black;
         }
     }
 }

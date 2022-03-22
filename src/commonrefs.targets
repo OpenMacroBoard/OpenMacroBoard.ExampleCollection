@@ -1,19 +1,20 @@
-<Project Sdk="Microsoft.NET.Sdk">
-    <Import Project="settings.targets" />
-    <Choose>
-        <When Condition="'$(ReferenceType)' == 'local'">
-            <ItemGroup>
-                <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.VirtualBoard\OpenMacroBoard.VirtualBoard.csproj" />
-                <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
-                <ProjectReference Include="..\..\..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
-            </ItemGroup>
-        </When>
-        <Otherwise>
-            <ItemGroup>
-                <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
-                <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
-                <PackageReference Include="OpenMacroBoard.VirtualBoard" Version="4.1.0" />
-            </ItemGroup>
-        </Otherwise>
-    </Choose>
+<Project>
+  <Import Project="settings.targets" />
+  <ItemGroup>
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+  </ItemGroup>
+  <Choose>
+    <When Condition="'$(ReferenceType)' == 'local'">
+      <ItemGroup>
+        <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+        <ProjectReference Include="..\..\..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
+      </ItemGroup>
+    </When>
+    <Otherwise>
+      <ItemGroup>
+        <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
+        <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
+      </ItemGroup>
+    </Otherwise>
+  </Choose>
 </Project>

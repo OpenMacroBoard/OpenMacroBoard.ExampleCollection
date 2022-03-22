@@ -1,15 +1,22 @@
 using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
-using System.Drawing;
+using System.Globalization;
 
 namespace OpenMacroBoard.Examples.ButtonPressDiagnostics
 {
-    class Program
+    internal static class Program
     {
+        private static readonly Font Font = SystemFonts.CreateFont("Arial", 24);
         private static int[] counter;
 
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             using var deck = ExampleHelper.OpenBoard();
 
@@ -29,7 +36,8 @@ namespace OpenMacroBoard.Examples.ButtonPressDiagnostics
 
                 switch (key.Key)
                 {
-                    case ConsoleKey.Q: return;
+                    case ConsoleKey.Q:
+                        return;
 
                     case ConsoleKey.C:
                         deck.ClearKeys();
@@ -46,7 +54,7 @@ namespace OpenMacroBoard.Examples.ButtonPressDiagnostics
 
         private static void Deck_KeyPressed(object sender, KeyEventArgs e)
         {
-            if (!(sender is IMacroBoard d))
+            if (sender is not IMacroBoard d)
             {
                 return;
             }
@@ -56,19 +64,27 @@ namespace OpenMacroBoard.Examples.ButtonPressDiagnostics
                 counter[e.Key]++;
             }
 
-            var k = KeyBitmap.Create.FromGraphics(96, 96, g =>
-            {
-                g.Clear(Color.Black);
+            var keyImage = new Image<Bgr24>(96, 96);
 
+            keyImage.Mutate(img =>
+            {
                 if (e.IsDown)
                 {
-                    g.FillEllipse(Brushes.White, new RectangleF(60, 12, 10, 10));
+                    var circle = new EllipsePolygon(72, 20, 5);
+                    img.Fill(Color.White, circle);
                 }
 
-                g.DrawString(counter[e.Key].ToString(), new Font("Arial", 12), Brushes.White, new PointF(10, 10));
+                img.DrawText(
+                    counter[e.Key].ToString(CultureInfo.InvariantCulture),
+                    Font,
+                    Color.White,
+                    new PointF(10, 10)
+                );
             });
 
-            d.SetKeyBitmap(e.Key, k);
+            var key = KeyBitmap.Create.FromImageSharpImage(keyImage);
+
+            d.SetKeyBitmap(e.Key, key);
         }
     }
 }

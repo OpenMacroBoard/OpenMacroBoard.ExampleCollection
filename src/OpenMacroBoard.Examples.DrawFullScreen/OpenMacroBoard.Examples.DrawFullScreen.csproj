@@ -2,8 +2,10 @@
   <Import Project="..\examplerefs.targets" />
   <ItemGroup>
     <None Remove="ExampleImage.jpg" />
+    <None Remove="ExampleImageText.jpg" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="ExampleImage.jpg" />
+    <EmbeddedResource Include="ExampleImageText.jpg" />
   </ItemGroup>
 </Project>

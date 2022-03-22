@@ -1,15 +1,16 @@
-﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
 using System;
+using System.Threading;
 
 namespace OpenMacroBoard.Examples.Rainbow
 {
-    internal class Program
+    internal static class Program
     {
-        private static readonly Random rnd = new Random();
-        private static readonly byte[] rgbBuffer = new byte[3];
+        private static readonly Random Rnd = new();
+        private static readonly byte[] RgbBuffer = new byte[3];
 
-        private static int firstKeyId = 0;
+        private static readonly int FirstKeyId = 0;
         private static int lastKeyId = 0;
 
         private static bool firstKeyPressed = false;
@@ -17,23 +18,35 @@ namespace OpenMacroBoard.Examples.Rainbow
 
         private static void Main()
         {
-            using (var deck = ExampleHelper.OpenBoard())
+            using var deck = ExampleHelper.OpenBoard();
+
+            lastKeyId = deck.Keys.Count - 1;
+
+            Console.WriteLine("INFO: Press some keys on the Stream Deck.");
+
+            deck.ClearKeys();
+            deck.KeyStateChanged += Deck_KeyPressed;
+            Console.WriteLine();
+
+            new Thread(() =>
             {
-                deck.SetBrightness(100);
-                lastKeyId = deck.Keys.Count - 1;
-
-                Console.WriteLine("INFO: Press some keys on the Stream Deck.");
-                deck.ClearKeys();
-                deck.KeyStateChanged += Deck_KeyPressed;
-                Console.WriteLine();
-
-                ExampleHelper.WaitForKeyToExit();
+                while (true)
+                {
+                    Thread.Sleep(2000);
+                    deck.ShowLogo();
+                }
+            })
+            {
+                IsBackground = true,
             }
+            .Start();
+
+            ExampleHelper.WaitForKeyToExit();
         }
 
         private static void Deck_KeyPressed(object sender, KeyEventArgs e)
         {
-            if (!(sender is IMacroBoard d))
+            if (sender is not IMacroBoard d)
             {
                 return;
             }
@@ -43,7 +56,7 @@ namespace OpenMacroBoard.Examples.Rainbow
                 d.SetKeyBitmap(e.Key, GetRandomColorImage());
             }
 
-            if (e.Key == firstKeyId)
+            if (e.Key == FirstKeyId)
             {
                 firstKeyPressed = e.IsDown;
             }
@@ -61,8 +74,8 @@ namespace OpenMacroBoard.Examples.Rainbow
 
         private static KeyBitmap GetRandomColorImage()
         {
-            rnd.NextBytes(rgbBuffer);
-            return KeyBitmap.Create.FromRgb(rgbBuffer[0], rgbBuffer[1], rgbBuffer[2]);
+            Rnd.NextBytes(RgbBuffer);
+            return KeyBitmap.Create.FromRgb(RgbBuffer[0], RgbBuffer[1], RgbBuffer[2]);
         }
     }
 }

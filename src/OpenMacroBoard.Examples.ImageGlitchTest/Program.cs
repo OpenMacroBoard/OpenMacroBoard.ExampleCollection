@@ -1,11 +1,9 @@
 using OpenMacroBoard.Examples.CommonStuff;
-using OpenMacroBoard.SDK;
-using StreamDeckSharp;
 using System;
 
 namespace OpenMacroBoard.Examples.ImageGlitchTest
 {
-    internal class Program
+    internal static class Program
     {
         private static bool exitRequested = false;
         private static bool readGlitchEnabled = true;
@@ -14,28 +12,26 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
         {
             Console.CancelKeyPress += Console_CancelKeyPress;
 
-            using (var deck = ExampleHelper.OpenBoard())
+            using var deck = ExampleHelper.OpenBoard();
+
+            var imgFactory = new ReferenceImageFactory(deck.GetDeviceImageSize(), deck.Keys.Count);
+
+            Console.WriteLine("Use numpad + and - to iterate through different patterns and return to toggle ReadGlitch.");
+            Console.WriteLine();
+
+            while (!exitRequested)
             {
-                var imgFactory = new ReferenceImageFactory(deck.GetDeviceImageSize(), deck.Keys.Count);
-                var readerAction = GetReadAction(deck);
-
-                Console.WriteLine("Use Numpad + and - to iterate through different patterns and Return to toggle ReadGlitch.");
-                Console.WriteLine();
-
-                while (!exitRequested)
+                for (var i = 0; i < deck.Keys.Count; i++)
                 {
-                    for (var i = 0; i < deck.Keys.Count; i++)
+                    deck.SetKeyBitmap(i, imgFactory.GetKeyBitmap(i));
+
+                    if (readGlitchEnabled)
                     {
-                        deck.SetKeyBitmap(i, imgFactory.GetKeyBitmap(i));
-
-                        if (readGlitchEnabled)
-                        {
-                            readerAction();
-                        }
+                        deck.GetSerialNumber();
                     }
-
-                    ProcessConsoleKeys(imgFactory);
                 }
+
+                ProcessConsoleKeys(imgFactory);
             }
         }
 
@@ -45,11 +41,11 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
             {
                 var k = Console.ReadKey(true);
 
-                if (k.Key == ConsoleKey.Add)
+                if (k.Key is ConsoleKey.Add or ConsoleKey.OemPlus)
                 {
                     imgFactory.CurrentMode++;
                 }
-                else if (k.Key == ConsoleKey.Subtract)
+                else if (k.Key is ConsoleKey.Subtract or ConsoleKey.OemMinus)
                 {
                     imgFactory.CurrentMode--;
                 }
@@ -57,20 +53,12 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 {
                     readGlitchEnabled = !readGlitchEnabled;
                 }
+                else
+                {
+                    Console.WriteLine($"Ignoring unmapped key: {k.Key}");
+                }
 
                 Console.WriteLine($"Pattern ID: {imgFactory.CurrentMode,2}{(readGlitchEnabled ? " + GLITCH" : string.Empty)}");
-            }
-        }
-
-        private static Action GetReadAction(IMacroBoard deck)
-        {
-            if (deck is IStreamDeckBoard streamDeck)
-            {
-                return () => streamDeck.GetSerialNumber();
-            }
-            else
-            {
-                return () => { };
             }
         }
 

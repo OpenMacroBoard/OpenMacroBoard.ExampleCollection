@@ -1,6 +1,6 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project>
     <PropertyGroup>
         <!-- Use 'local' or 'nuget' -->
-        <ReferenceType>nuget</ReferenceType>
+        <ReferenceType>local</ReferenceType>
     </PropertyGroup>
 </Project>

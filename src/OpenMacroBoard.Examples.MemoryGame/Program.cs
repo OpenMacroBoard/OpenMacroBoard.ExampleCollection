@@ -1,80 +1,86 @@
-﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
 using System;
 using System.Threading;
 
 namespace OpenMacroBoard.Examples.MemoryGame
 {
-    internal class Program
+    internal static class Program
     {
-        private static readonly Random rnd = new Random();
+        private static readonly Random Rnd = new();
 
-        //positon of restart button
-        private static readonly int restartKey = 7;
+        /// <summary>
+        /// Positon of restart button
+        /// </summary>
+        private static readonly int RestartKey = 7;
+        private static readonly int[] OpenCard = new int[2];
+
+        private static readonly KeyBitmap[] IconsActive = new KeyBitmap[7];
+        private static readonly KeyBitmap[] IconsInactive = new KeyBitmap[7];
+
+        /// <summary>
+        /// 14 slots for memory (7x2 cards)
+        /// </summary>
+        private static readonly int[] GameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
+        private static readonly bool[] CardVisible = new bool[14];
+
+        private static readonly AutoResetEvent ThreadSleeper = new(false);
+        private static readonly object CloseCardLock = new();
 
         private static int mode = 0;
-        private static readonly int[] openCard = new int[2];
-
         private static KeyBitmap restartIcon;
-        private static readonly KeyBitmap[] iconsActive = new KeyBitmap[7];
-        private static readonly KeyBitmap[] iconsInactive = new KeyBitmap[7];
-
-        //14 slots for memory (7x2 cards)
-        private static readonly int[] gameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
-        private static readonly bool[] cardVisible = new bool[14];
 
         private static void Main()
         {
             InitializeIconBitmaps();
 
-            using (var s = ExampleHelper.OpenStreamDeck())
-            {
-                s.KeyStateChanged += StreamDeckKeyHandler;
-                StartGame(s);
+            using var s = ExampleHelper.OpenBoard(d => d.Keys.Count == 15);
 
-                ExampleHelper.WaitForKeyToExit();
-            }
+            s.KeyStateChanged += StreamDeckKeyHandler;
+            StartGame(s);
+
+            ExampleHelper.WaitForKeyToExit();
         }
 
         private static void StartGame(IMacroBoard deck)
         {
-            //suffle memory cards
-            openCard[0] = -1;
-            openCard[1] = -1;
+            // shuffle memory cards
+            OpenCard[0] = -1;
+            OpenCard[1] = -1;
             mode = 0;
-            SuffleArray(gameState, rnd);
+            SuffleArray(GameState, Rnd);
 
-            for (var i = 0; i < cardVisible.Length; i++)
+            for (var i = 0; i < CardVisible.Length; i++)
             {
-                cardVisible[i] = false;
+                CardVisible[i] = false;
             }
 
-            //Clear all tiles (except restart key)
+            // Clear all tiles (except restart key)
             for (var i = 0; i < deck.Keys.Count; i++)
             {
-                if (i != restartKey)
+                if (i != RestartKey)
                 {
                     deck.ClearKey(i);
                 }
             }
 
-            //(Re-)Draw restart key image
-            deck.SetKeyBitmap(restartKey, restartIcon);
+            // (Re-)Draw restart key image
+            deck.SetKeyBitmap(RestartKey, restartIcon);
         }
 
         private static void RefreshKeyIcon(IMacroBoard deck, int cardId)
         {
-            var keyId = cardId >= restartKey ? cardId + 1 : cardId;
+            var keyId = cardId >= RestartKey ? cardId + 1 : cardId;
 
-            if (cardVisible[cardId])
+            if (CardVisible[cardId])
             {
-                if ((openCard[0] == cardId || openCard[1] == cardId))
+                if (OpenCard[0] == cardId || OpenCard[1] == cardId)
                 {
-                    deck.SetKeyBitmap(keyId, iconsInactive[gameState[cardId]]);
+                    deck.SetKeyBitmap(keyId, IconsInactive[GameState[cardId]]);
                 }
                 else
                 {
-                    deck.SetKeyBitmap(keyId, iconsActive[gameState[cardId]]);
+                    deck.SetKeyBitmap(keyId, IconsActive[GameState[cardId]]);
                 }
             }
             else
@@ -86,11 +92,11 @@ namespace OpenMacroBoard.Examples.MemoryGame
         private static void InitializeIconBitmaps()
         {
             restartIcon = IconLoader.LoadIconByName("restart.png", true);
-            for (var i = 0; i < iconsActive.Length; i++)
+            for (var i = 0; i < IconsActive.Length; i++)
             {
                 var name = $"card{i}.png";
-                iconsActive[i] = IconLoader.LoadIconByName(name, true);
-                iconsInactive[i] = IconLoader.LoadIconByName(name, false);
+                IconsActive[i] = IconLoader.LoadIconByName(name, true);
+                IconsInactive[i] = IconLoader.LoadIconByName(name, false);
             }
         }
 
@@ -100,33 +106,28 @@ namespace OpenMacroBoard.Examples.MemoryGame
             {
                 var pick = rnd.Next(array.Length - i) + i;
 
-                //Swap elements
+                // Swap elements
                 var tmp = array[i];
                 array[i] = array[pick];
                 array[pick] = tmp;
             }
         }
 
-
-        private static Thread sleepThread;
-
-        private static readonly AutoResetEvent threadSleeper = new AutoResetEvent(false);
-        private static readonly object closeCardLock = new object();
         private static void CloseCards(IMacroBoard deck)
         {
-            lock (closeCardLock)
+            lock (CloseCardLock)
             {
                 if (mode != 2)
                 {
                     return;
                 }
 
-                cardVisible[openCard[0]] = false;
-                cardVisible[openCard[1]] = false;
-                var c1 = openCard[0];
-                var c2 = openCard[1];
-                openCard[0] = -1;
-                openCard[1] = -1;
+                CardVisible[OpenCard[0]] = false;
+                CardVisible[OpenCard[1]] = false;
+                var c1 = OpenCard[0];
+                var c2 = OpenCard[1];
+                OpenCard[0] = -1;
+                OpenCard[1] = -1;
                 RefreshKeyIcon(deck, c1);
                 RefreshKeyIcon(deck, c2);
                 mode = 0;
@@ -135,12 +136,12 @@ namespace OpenMacroBoard.Examples.MemoryGame
 
         private static void StreamDeckKeyHandler(object sender, KeyEventArgs e)
         {
-            if (!(sender is IMacroBoard deck))
+            if (sender is not IMacroBoard deck)
             {
                 return;
             }
 
-            if (e.Key == restartKey && e.IsDown)
+            if (e.Key == RestartKey && e.IsDown)
             {
                 StartGame(deck);
                 return;
@@ -150,48 +151,47 @@ namespace OpenMacroBoard.Examples.MemoryGame
             {
                 if (mode == 2)
                 {
-                    threadSleeper.Set();
+                    ThreadSleeper.Set();
                     CloseCards(deck);
                 }
 
-                var cardId = e.Key < restartKey ? e.Key : e.Key - 1;
+                var cardId = e.Key < RestartKey ? e.Key : e.Key - 1;
                 if (mode == 0)
                 {
-                    if (!cardVisible[cardId])
+                    if (!CardVisible[cardId])
                     {
                         mode = 1;
-                        openCard[0] = cardId;
-                        cardVisible[cardId] = true;
+                        OpenCard[0] = cardId;
+                        CardVisible[cardId] = true;
                         RefreshKeyIcon(deck, cardId);
                     }
                 }
-                else if (mode == 1)
+                else if (mode == 1 && !CardVisible[cardId])
                 {
-                    if (!cardVisible[cardId])
+                    OpenCard[1] = cardId;
+                    CardVisible[cardId] = true;
+                    RefreshKeyIcon(deck, cardId);
+
+                    if (GameState[OpenCard[0]] == GameState[OpenCard[1]])
                     {
-                        openCard[1] = cardId;
-                        cardVisible[cardId] = true;
-                        RefreshKeyIcon(deck, cardId);
-                        if (gameState[openCard[0]] == gameState[openCard[1]])
+                        mode = 0;
+                        var c1 = OpenCard[0];
+                        var c2 = OpenCard[1];
+                        OpenCard[0] = -1;
+                        OpenCard[1] = -1;
+                        RefreshKeyIcon(deck, c1);
+                        RefreshKeyIcon(deck, c2);
+                    }
+                    else
+                    {
+                        mode = 2;
+
+                        new Thread(() =>
                         {
-                            mode = 0;
-                            var c1 = openCard[0];
-                            var c2 = openCard[1];
-                            openCard[0] = -1;
-                            openCard[1] = -1;
-                            RefreshKeyIcon(deck, c1);
-                            RefreshKeyIcon(deck, c2);
-                        }
-                        else
-                        {
-                            mode = 2;
-                            sleepThread = new Thread(() =>
-                            {
-                                var timeout = threadSleeper.WaitOne(2000);
-                                CloseCards(deck);
-                            });
-                            sleepThread.Start();
-                        }
+                            ThreadSleeper.WaitOne(2000);
+                            CloseCards(deck);
+                        })
+                        .Start();
                     }
                 }
             }

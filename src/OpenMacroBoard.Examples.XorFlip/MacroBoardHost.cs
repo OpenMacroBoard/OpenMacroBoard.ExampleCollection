@@ -1,4 +1,4 @@
-﻿using OpenMacroBoard.SDK;
+using OpenMacroBoard.SDK;
 using System;
 
 namespace OpenMacroBoard.Examples.XorFlip
@@ -16,13 +16,8 @@ namespace OpenMacroBoard.Examples.XorFlip
             this.board = board ?? throw new ArgumentNullException(nameof(board));
             board.KeyStateChanged += Board_KeyStateChanged;
 
-            if (!(board.Keys is GridKeyPositionCollection gridKeys))
-            {
-                throw new NotSupportedException();
-            }
-
-            Width = gridKeys.KeyCountX;
-            Height = gridKeys.KeyCountY;
+            Width = board.Keys.CountX;
+            Height = board.Keys.CountY;
 
             keyBlocked = KeyBitmap.Create.FromRgb(100, 0, 0);
             keyOff = KeyBitmap.Black;
@@ -30,11 +25,10 @@ namespace OpenMacroBoard.Examples.XorFlip
             gameWon = KeyBitmap.Create.FromRgb(100, 100, 255);
         }
 
+        public event EventHandler<ButtonPosEventArgs> ButtonPressed;
+
         public int Width { get; }
         public int Height { get; }
-
-        public event EventHandler<ButtonPosEventsArgs> ButtonPressed;
-        public event EventHandler ResetCommand;
 
         public void DrawImages(XorFlipButtonState[,] buttonStates)
         {
@@ -67,7 +61,7 @@ namespace OpenMacroBoard.Examples.XorFlip
             if (e.IsDown)
             {
                 (var x, var y) = KeyTransform(e.Key);
-                ButtonPressed?.Invoke(this, new ButtonPosEventsArgs(x, y));
+                ButtonPressed?.Invoke(this, new ButtonPosEventArgs(x, y));
             }
         }
 

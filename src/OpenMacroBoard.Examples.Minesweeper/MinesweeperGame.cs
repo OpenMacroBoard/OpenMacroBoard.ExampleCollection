@@ -6,6 +6,8 @@ namespace OpenMacroBoard.Examples.Minesweeper
     {
         private readonly FieldValue[,] field;
 
+        private int fieldsToOpen;
+
         public MinesweeperGame(int width, int height)
         {
             Width = width;
@@ -21,19 +23,6 @@ namespace OpenMacroBoard.Examples.Minesweeper
         public MinesweeperGameState GameState { get; private set; } = MinesweeperGameState.Running;
 
         public FieldValue this[int x, int y] => field[x, y];
-
-        private int fieldsToOpen;
-
-        private void InitializeField()
-        {
-            for (var y = 0; y < Height; y++)
-            {
-                for (var x = 0; x < Width; x++)
-                {
-                    field[x, y] = new FieldValue();
-                }
-            }
-        }
 
         public void ToggleFlag(int x, int y)
         {
@@ -103,6 +92,17 @@ namespace OpenMacroBoard.Examples.Minesweeper
             return true;
         }
 
+        private void InitializeField()
+        {
+            for (var y = 0; y < Height; y++)
+            {
+                for (var x = 0; x < Width; x++)
+                {
+                    field[x, y] = new FieldValue();
+                }
+            }
+        }
+
         private void GameOverProcedure(bool won)
         {
             for (var y = 0; y < Height; y++)
@@ -124,7 +124,7 @@ namespace OpenMacroBoard.Examples.Minesweeper
             }
         }
 
-        private IEnumerable<(int x, int y)> GetNeighbours(int x, int y, bool includeCenter = false)
+        private IEnumerable<(int X, int Y)> GetNeighbours(int x, int y, bool includeCenter = false)
         {
             for (var offsetY = -1; offsetY <= 1; offsetY++)
             {

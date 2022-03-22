@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 
 namespace OpenMacroBoard.Examples.XorFlip
 {
     public class XorFlipGame
     {
         private readonly IXorFlipHost host;
-        private readonly Random rnd = new Random();
+        private readonly Random rnd = new();
         private readonly XorFlipButtonState[,] board;
 
         public XorFlipGame(IXorFlipHost host)
@@ -17,7 +17,7 @@ namespace OpenMacroBoard.Examples.XorFlip
             StartRandomGame();
         }
 
-        private void Host_ButtonPressed(object sender, ButtonPosEventsArgs e)
+        private void Host_ButtonPressed(object sender, ButtonPosEventArgs e)
         {
             if (IsGameWon())
             {
@@ -65,7 +65,6 @@ namespace OpenMacroBoard.Examples.XorFlip
 
             return true;
         }
-
 
         private void FlipEverythingRandomly()
         {

@@ -1,31 +1,29 @@
-﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
-using System.Drawing;
+using SixLabors.ImageSharp;
 using System.Reflection;
 
 namespace OpenMacroBoard.Examples.DrawFullScreen
 {
-    internal class Program
+    internal static class Program
     {
         private static void Main()
         {
-            using (var deck = ExampleHelper.OpenBoard())
-            using (var bmp = LoadExampleImageFromResources())
-            {
-                deck.DrawFullScreenBitmap(bmp);
-                ExampleHelper.WaitForKeyToExit();
-            }
+            using var deck = ExampleHelper.OpenBoard();
+            using var bmp = LoadExampleImageFromResources();
+
+            deck.DrawFullScreenBitmap(bmp);
+            ExampleHelper.WaitForKeyToExit();
         }
 
-        private static Bitmap LoadExampleImageFromResources()
+        private static Image LoadExampleImageFromResources()
         {
-            var asm = Assembly.GetExecutingAssembly();
-            var resourceName = "OpenMacroBoard.Examples.DrawFullScreen.ExampleImage.jpg";
+            const string resourceName = "OpenMacroBoard.Examples.DrawFullScreen.ExampleImageText.jpg";
 
-            using (var resStream = asm.GetManifestResourceStream(resourceName))
-            {
-                return (Bitmap)Image.FromStream(resStream);
-            }
+            var asm = Assembly.GetExecutingAssembly();
+            using var resStream = asm.GetManifestResourceStream(resourceName);
+
+            return Image.Load(resStream);
         }
     }
 }

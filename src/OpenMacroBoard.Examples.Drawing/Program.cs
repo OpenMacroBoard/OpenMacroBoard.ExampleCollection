@@ -1,44 +1,36 @@
-﻿using OpenMacroBoard.Examples.CommonStuff;
+using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
+using SixLabors.Fonts;
+using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Drawing.Processing;
+using SixLabors.ImageSharp.PixelFormats;
+using SixLabors.ImageSharp.Processing;
 using System;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Text;
+using System.Globalization;
 
 namespace OpenMacroBoard.Examples.Drawing
 {
-    internal class Program
+    internal static class Program
     {
-        private const int kSize = 100;
+        private const int KeySize = 100;
 
         [STAThread]
         private static void Main()
         {
-            using (var deck = ExampleHelper.OpenBoard())
-            {
-                ExampleWithSystemDrawing(deck);
-                ExampleHelper.WaitForKeyToExit();
-            }
+            using var deck = ExampleHelper.OpenBoard();
+
+            ExampleWithSystemDrawing(deck);
+            ExampleHelper.WaitForKeyToExit();
         }
 
         private static void ExampleWithSystemDrawing(IMacroBoard deck)
         {
-            //Create a key with lambda graphics
-            var key = KeyBitmap.Create.FromGraphics(kSize, kSize, g =>
-            {
-                //See https://stackoverflow.com/questions/6311545/c-sharp-write-text-on-bitmap for details
-                g.SmoothingMode = SmoothingMode.AntiAlias;
-                g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-                g.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
+            var image = new Image<Bgr24>(KeySize, KeySize);
+            var font = SystemFonts.Find("Arial", CultureInfo.InvariantCulture).CreateFont(13);
 
-                //Fill background black
-                g.FillRectangle(Brushes.Black, 0, 0, kSize, kSize);
+            image.Mutate(x => x.DrawText("Your Text", font, Color.White, new PointF(5, 20)));
 
-                //Write text to graphics
-                var f = new Font("Arial", 13);
-                g.DrawString("Drawing", f, Brushes.White, new PointF(5, 20));
-            });
+            var key = KeyBitmap.Create.FromImageSharpImage(image);
 
             deck.SetKeyBitmap(key);
         }
