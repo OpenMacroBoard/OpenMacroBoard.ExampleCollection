@@ -7,12 +7,14 @@
     <When Condition="'$(ReferenceType)' == 'local'">
       <ItemGroup>
         <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SDK\OpenMacroBoard.SDK.csproj" />
+        <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SocketIO\OpenMacroBoard.SocketIO.csproj" />
         <ProjectReference Include="..\..\..\StreamDeckSharp\src\StreamDeckSharp\StreamDeckSharp.csproj" />
       </ItemGroup>
     </When>
     <Otherwise>
       <ItemGroup>
         <PackageReference Include="OpenMacroBoard.SDK" Version="4.0.0-preview" />
+        <PackageReference Include="OpenMacroBoard.SocketIO" Version="4.0.0-preview" />
         <PackageReference Include="StreamDeckSharp" Version="4.0.0-preview" />
       </ItemGroup>
     </Otherwise>

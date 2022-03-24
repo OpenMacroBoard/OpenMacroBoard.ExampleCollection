@@ -6,7 +6,4 @@
 
   <Import Project="..\commonrefs.targets" />
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenMacroBoard.SDK\src\OpenMacroBoard.SocketIO\OpenMacroBoard.SocketIO.csproj" />
-  </ItemGroup>
 </Project>
