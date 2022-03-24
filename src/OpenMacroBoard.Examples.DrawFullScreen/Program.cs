@@ -1,6 +1,7 @@
 using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
 using SixLabors.ImageSharp;
+using SixLabors.ImageSharp.Processing;
 using System.Reflection;
 
 namespace OpenMacroBoard.Examples.DrawFullScreen
@@ -12,7 +13,7 @@ namespace OpenMacroBoard.Examples.DrawFullScreen
             using var deck = ExampleHelper.OpenBoard();
             using var bmp = LoadExampleImageFromResources();
 
-            deck.DrawFullScreenBitmap(bmp);
+            deck.DrawFullScreenBitmap(bmp, ResizeMode.Crop);
             ExampleHelper.WaitForKeyToExit();
         }
 
