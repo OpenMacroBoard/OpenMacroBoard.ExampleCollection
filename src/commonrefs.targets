@@ -1,7 +1,7 @@
 <Project>
   <Import Project="settings.targets" />
   <ItemGroup>
-    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta13" />
+    <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta14" />
   </ItemGroup>
   <Choose>
     <When Condition="'$(ReferenceType)' == 'local'">
@@ -12,8 +12,8 @@
     </When>
     <Otherwise>
       <ItemGroup>
-        <PackageReference Include="OpenMacroBoard.SDK" Version="3.0.0" />
-        <PackageReference Include="StreamDeckSharp" Version="3.2.0" />
+        <PackageReference Include="OpenMacroBoard.SDK" Version="4.0.0-preview" />
+        <PackageReference Include="StreamDeckSharp" Version="4.0.0-preview" />
       </ItemGroup>
     </Otherwise>
   </Choose>

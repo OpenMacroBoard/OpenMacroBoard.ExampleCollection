@@ -26,7 +26,7 @@ namespace OpenMacroBoard.Examples.Drawing
         private static void ExampleWithSystemDrawing(IMacroBoard deck)
         {
             var image = new Image<Bgr24>(KeySize, KeySize);
-            var font = SystemFonts.Find("Arial", CultureInfo.InvariantCulture).CreateFont(13);
+            var font = SystemFonts.Get("Arial", CultureInfo.InvariantCulture).CreateFont(13);
 
             image.Mutate(x => x.DrawText("Your Text", font, Color.White, new PointF(5, 20)));
 
