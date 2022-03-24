@@ -1,7 +1,6 @@
 using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
 using System;
-using System.Threading;
 
 namespace OpenMacroBoard.Examples.Rainbow
 {
@@ -27,19 +26,6 @@ namespace OpenMacroBoard.Examples.Rainbow
             deck.ClearKeys();
             deck.KeyStateChanged += Deck_KeyPressed;
             Console.WriteLine();
-
-            new Thread(() =>
-            {
-                while (true)
-                {
-                    Thread.Sleep(2000);
-                    deck.ShowLogo();
-                }
-            })
-            {
-                IsBackground = true,
-            }
-            .Start();
 
             ExampleHelper.WaitForKeyToExit();
         }
