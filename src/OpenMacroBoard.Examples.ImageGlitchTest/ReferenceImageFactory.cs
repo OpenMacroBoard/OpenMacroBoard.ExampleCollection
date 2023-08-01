@@ -181,7 +181,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 raw[p + 2] = 255;
             }
 
-            return KeyBitmap.FromBgr24Array(imgSize, imgSize, raw);
+            return KeyBitmap.Create.FromBgr24Array(imgSize, imgSize, raw);
         }
 
         private KeyBitmap Rainbow(int keyId)
@@ -215,7 +215,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 }
             }
 
-            return KeyBitmap.FromBgr24Array(imgSize, imgSize, raw);
+            return KeyBitmap.Create.FromBgr24Array(imgSize, imgSize, raw);
         }
 
         private KeyBitmap GetHorizontalStripeImage(int pos)
@@ -230,7 +230,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 raw[p + 2] = 255;
             }
 
-            return KeyBitmap.FromBgr24Array(imgSize, imgSize, raw);
+            return KeyBitmap.Create.FromBgr24Array(imgSize, imgSize, raw);
         }
 
         private KeyBitmap GetGrayImage(byte b)
@@ -242,7 +242,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 raw[i] = b;
             }
 
-            return KeyBitmap.FromBgr24Array(imgSize, imgSize, raw);
+            return KeyBitmap.Create.FromBgr24Array(imgSize, imgSize, raw);
         }
     }
 }

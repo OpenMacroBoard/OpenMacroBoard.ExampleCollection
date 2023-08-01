@@ -1,9 +1,9 @@
-using System;
-using System.Diagnostics.CodeAnalysis;
-using System.Net;
 using OpenMacroBoard.SDK;
 using OpenMacroBoard.SocketIO;
 using StreamDeckSharp;
+using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Net;
 
 namespace OpenMacroBoard.Examples.DeviceContextShowcase
 {

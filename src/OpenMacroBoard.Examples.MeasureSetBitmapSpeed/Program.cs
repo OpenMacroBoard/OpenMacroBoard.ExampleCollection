@@ -20,7 +20,7 @@ namespace OpenMacroBoard.Examples.MeasureSetBitmapSpeed
             var rnd = new Random();
             var raw = new byte[imgSize * imgSize * 3];
             rnd.NextBytes(raw);
-            var rndImage = KeyBitmap.FromBgr24Array(imgSize, imgSize, raw);
+            var rndImage = KeyBitmap.Create.FromBgr24Array(imgSize, imgSize, raw);
 
             deck.ClearKeys();
 

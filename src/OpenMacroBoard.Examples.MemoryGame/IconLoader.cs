@@ -27,7 +27,7 @@ namespace OpenMacroBoard.Examples.MemoryGame
                 }
             }
 
-            return KeyBitmap.FromBgr24Array(72, 72, raw);
+            return KeyBitmap.Create.FromBgr24Array(72, 72, raw);
         }
 
         private static byte[] ConvertBitmapToRgb24(Bitmap bitmap)
