@@ -107,9 +107,7 @@ namespace OpenMacroBoard.Examples.MemoryGame
                 var pick = rnd.Next(array.Length - i) + i;
 
                 // Swap elements
-                var tmp = array[i];
-                array[i] = array[pick];
-                array[pick] = tmp;
+                (array[pick], array[i]) = (array[i], array[pick]);
             }
         }
 

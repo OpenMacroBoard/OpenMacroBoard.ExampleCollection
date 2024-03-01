@@ -130,7 +130,10 @@ namespace OpenMacroBoard.Examples.Minesweeper
             {
                 for (var offsetX = -1; offsetX <= 1; offsetX++)
                 {
+#pragma warning disable S2589 // Boolean expressions should not be gratuitous
+                    // https://github.com/SonarSource/sonar-dotnet/issues/7088
                     if (!includeCenter && offsetX == 0 && offsetY == 0)
+#pragma warning restore S2589
                     {
                         continue;
                     }

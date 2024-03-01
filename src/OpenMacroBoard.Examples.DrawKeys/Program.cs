@@ -23,7 +23,7 @@ namespace OpenMacroBoard.Examples.DrawKeys
             using var deck = ExampleHelper.OpenBoard();
 
             var lastActive = -1;
-            deck.KeyStateChanged += (s, e) =>
+            deck.KeyStateChanged += (_, e) =>
             {
                 if (!e.IsDown)
                 {

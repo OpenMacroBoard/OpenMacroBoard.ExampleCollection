@@ -1,8 +1,9 @@
 <Project>
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net461</TargetFrameworks>
+    <TargetFrameworks>net462</TargetFrameworks>
     <LangVersion>9</LangVersion>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <Import Project="commonrefs.targets" />
