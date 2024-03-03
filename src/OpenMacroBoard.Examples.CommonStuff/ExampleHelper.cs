@@ -109,20 +109,22 @@ namespace OpenMacroBoard.Examples.CommonStuff
 
                 var refcopyDeviceList = deviceList;
 
-                if (int.TryParse(selection, out var id))
+                if (!int.TryParse(selection, out var id))
                 {
-                    if (id >= 0 && id < refcopyDeviceList.Count)
-                    {
-                        Console.Clear();
+                    continue;
+                }
 
-                        var device = refcopyDeviceList[id]
-                            .Open()
-                            .WithDisconnectReplay()
-                            .WithButtonPressEffect();
+                if (id >= 0 && id < refcopyDeviceList.Count)
+                {
+                    Console.Clear();
 
-                        device.SetBrightness(100);
-                        return device;
-                    }
+                    var device = refcopyDeviceList[id]
+                        .Open()
+                        .WithDisconnectReplay()
+                        .WithButtonPressEffect();
+
+                    device.SetBrightness(100);
+                    return device;
                 }
             };
         }
