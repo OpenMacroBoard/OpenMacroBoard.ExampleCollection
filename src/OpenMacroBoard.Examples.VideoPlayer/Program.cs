@@ -1,4 +1,4 @@
-using Accord.Video.FFMPEG;
+using Emgu.CV;
 using OpenMacroBoard.Examples.CommonStuff;
 using OpenMacroBoard.SDK;
 using SixLabors.ImageSharp;
@@ -29,24 +29,32 @@ namespace OpenMacroBoard.Examples.VideoPlayer
 
         private static void PlayVideoAForgeFFMPEG(IMacroBoard deck, string videoPath)
         {
-            using var reader = new VideoFileReader();
+            using var reader = new VideoCapture(videoPath);
+            var frameRate = reader.Get(Emgu.CV.CvEnum.CapProp.Fps);
 
-            reader.Open(videoPath);
-            var fr = reader.FrameRate;
-            var frameLength = (int)Math.Round(1000.0 / fr.ToDouble());
+            if (frameRate <= 1)
+            {
+                // FPS below 1, we fall back to 30 FPS.
+                frameRate = 30.0;
+            }
+
+            var frameLength = (int)Math.Round(1000.0 / frameRate);
             long frameNum = 0;
 
-            while (true)
+            var frame = new Mat();
+
+            while (reader.Grab())
             {
                 var sw = Stopwatch.StartNew();
 
-                using var frame = reader.ReadVideoFrame();
-                if (frame == null)
+                reader.Retrieve(frame);
+
+                if (frame.IsEmpty)
                 {
-                    return;
+                    continue;
                 }
 
-                deck.DrawFullScreenBitmap(ConvertFrame(frame));
+                deck.DrawFullScreenBitmap(ConvertFrame(frame.ToBitmap()));
 
                 var wait = frameLength - (int)sw.ElapsedMilliseconds;
                 sw.Restart();

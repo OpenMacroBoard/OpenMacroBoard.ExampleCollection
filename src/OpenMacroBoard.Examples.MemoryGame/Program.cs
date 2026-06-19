@@ -21,11 +21,11 @@ namespace OpenMacroBoard.Examples.MemoryGame
         /// <summary>
         /// 14 slots for memory (7x2 cards)
         /// </summary>
-        private static readonly int[] GameState = new int[] { 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6 };
+        private static readonly int[] GameState = [0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6];
         private static readonly bool[] CardVisible = new bool[14];
 
         private static readonly AutoResetEvent ThreadSleeper = new(false);
-        private static readonly object CloseCardLock = new();
+        private static readonly Lock CloseCardLock = new();
 
         private static int mode = 0;
         private static KeyBitmap restartIcon;

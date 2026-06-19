@@ -16,9 +16,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
 
         private readonly Stopwatch stopwatch = Stopwatch.StartNew();
         private readonly Random rnd = new();
-        private readonly List<Func<int, KeyBitmap>> availableImageFactories = new();
-
-        private int currentMode = 0;
+        private readonly List<Func<int, KeyBitmap>> availableImageFactories = [];
         private Func<int, KeyBitmap> currentImageFactory;
 
         public ReferenceImageFactory(int imgSize, int keyCount)
@@ -26,8 +24,8 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
             this.imgSize = imgSize;
             this.keyCount = keyCount;
 
-            availableImageFactories.AddRange(new Func<int, KeyBitmap>[]
-            {
+            availableImageFactories.AddRange(
+            [
                 GetBlank,
                 Rainbow,
                 GetStableFilledImage,
@@ -36,7 +34,7 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
                 GetStableLineImageHorizontal,
                 GetChangingLineImageHorizontal,
                 GetChangingFilledImage,
-            });
+            ]);
 
             currentImageFactory = availableImageFactories[0];
         }
@@ -46,11 +44,11 @@ namespace OpenMacroBoard.Examples.ImageGlitchTest
 
         public int CurrentMode
         {
-            get => currentMode;
+            get;
             set
             {
-                currentMode = Mod(value, ModeCount);
-                currentImageFactory = availableImageFactories[currentMode];
+                field = Mod(value, ModeCount);
+                currentImageFactory = availableImageFactories[field];
             }
         }
 

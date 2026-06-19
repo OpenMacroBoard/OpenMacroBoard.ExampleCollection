@@ -30,7 +30,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
         public static IDeviceReference SelectBoard(IEnumerable<IDeviceReference> devices)
         {
             var devList = devices.ToList();
-            devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString()));
+            devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString(), StringComparison.Ordinal));
 
             if (devList.Count < 1)
             {
@@ -89,7 +89,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
                 ;
 
             var sync = new object();
-            IReadOnlyList<IKnownDevice> deviceList = new List<IKnownDevice>();
+            IReadOnlyList<IKnownDevice> deviceList = [];
 
             void UpdateAndRedraw()
             {
@@ -126,7 +126,7 @@ namespace OpenMacroBoard.Examples.CommonStuff
                     device.SetBrightness(100);
                     return device;
                 }
-            };
+            }
         }
 
         public static IMacroBoard OpenBoard()
