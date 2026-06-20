@@ -1,8 +1,3 @@
-// This file uses top level statements to simplify the "Getting Started" snippet
-
-#pragma warning disable IDE0211 // Convert to 'Program.Main' style program
-
-// <!--coderef:getting-started-->
 using OpenMacroBoard.SDK;
 using OpenMacroBoard.SocketIO;  // for VirtualMacroBoard
 using StreamDeckSharp;          // for StreamDeck
@@ -42,4 +37,3 @@ static byte GetRandomByte()
 {
     return (byte)Random.Shared.Next(255);
 }
-// <!--coderef:end-->
