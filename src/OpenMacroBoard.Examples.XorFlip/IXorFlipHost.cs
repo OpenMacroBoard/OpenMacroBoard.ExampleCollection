@@ -1,15 +1,14 @@
 using System;
 
-namespace OpenMacroBoard.Examples.XorFlip
+namespace OpenMacroBoard.Examples.XorFlip;
+
+public interface IXorFlipHost
 {
-    public interface IXorFlipHost
-    {
-        event EventHandler<ButtonPosEventArgs> ButtonPressed;
+    event EventHandler<ButtonPosEventArgs> ButtonPressed;
 
-        int Width { get; }
-        int Height { get; }
+    int Width { get; }
+    int Height { get; }
 
-        void GameWon();
-        void DrawImages(XorFlipButtonState[,] buttonStates);
-    }
+    void GameWon();
+    void DrawImages(XorFlipButtonState[,] buttonStates);
 }

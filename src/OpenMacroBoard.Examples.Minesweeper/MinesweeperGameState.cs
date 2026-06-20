@@ -1,9 +1,8 @@
-namespace OpenMacroBoard.Examples.Minesweeper
+namespace OpenMacroBoard.Examples.Minesweeper;
+
+internal enum MinesweeperGameState
 {
-    internal enum MinesweeperGameState
-    {
-        Running,
-        Won,
-        Lost,
-    }
+    Running,
+    Won,
+    Lost,
 }

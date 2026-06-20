@@ -7,162 +7,161 @@ using System.Linq;
 using System.Reactive.Linq;
 using System.Threading;
 
-namespace OpenMacroBoard.Examples.CommonStuff
+namespace OpenMacroBoard.Examples.CommonStuff;
+
+public static class ExampleHelper
 {
-    public static class ExampleHelper
+    private static int ctrlCCnt = 0;
+
+    static ExampleHelper()
     {
-        private static int ctrlCCnt = 0;
+        ImageSharpWarmupHelper.RunWarmup();
 
-        static ExampleHelper()
+        Console.CancelKeyPress += (s, e) =>
         {
-            ImageSharpWarmupHelper.RunWarmup();
+            e.Cancel = true;
+            Interlocked.Increment(ref ctrlCCnt);
+        };
+    }
 
-            Console.CancelKeyPress += (s, e) =>
-            {
-                e.Cancel = true;
-                Interlocked.Increment(ref ctrlCCnt);
-            };
+    public static int CtrlCCount => ctrlCCnt;
+    public static bool CtrlCWasPressed => ctrlCCnt > 0;
+
+    public static IDeviceReference SelectBoard(IEnumerable<IDeviceReference> devices)
+    {
+        var devList = devices.ToList();
+        devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString(), StringComparison.Ordinal));
+
+        if (devList.Count < 1)
+        {
+            return null;
         }
 
-        public static int CtrlCCount => ctrlCCnt;
-        public static bool CtrlCWasPressed => ctrlCCnt > 0;
-
-        public static IDeviceReference SelectBoard(IEnumerable<IDeviceReference> devices)
+        if (devList.Count == 1)
         {
-            var devList = devices.ToList();
-            devList.Sort((a, b) => string.Compare(a.ToString(), b.ToString(), StringComparison.Ordinal));
-
-            if (devList.Count < 1)
-            {
-                return null;
-            }
-
-            if (devList.Count == 1)
-            {
-                return devList[0];
-            }
-
-            var selected = ConsoleSelect(devList);
-            Console.Clear();
-
-            return selected;
+            return devList[0];
         }
 
-        public static T ConsoleSelect<T>(IEnumerable<T> elements)
+        var selected = ConsoleSelect(devList);
+        Console.Clear();
+
+        return selected;
+    }
+
+    public static T ConsoleSelect<T>(IEnumerable<T> elements)
+    {
+        var list = elements.ToArray();
+        var select = -1;
+
+        for (var i = 0; i < list.Length; i++)
         {
-            var list = elements.ToArray();
-            var select = -1;
-
-            for (var i = 0; i < list.Length; i++)
-            {
-                Console.WriteLine($"[{i}] {list[i]}");
-            }
-
-            Console.WriteLine();
-
-            do
-            {
-                Console.Write("Select: ");
-                var selection = Console.ReadLine();
-
-                if (int.TryParse(selection, out var id))
-                {
-                    select = id;
-                }
-            }
-            while (select < 0 || select >= list.Length);
-
-            return list[select];
+            Console.WriteLine($"[{i}] {list[i]}");
         }
 
-        public static void WaitForKeyToExit()
+        Console.WriteLine();
+
+        do
         {
-            Console.WriteLine("Please press any key (on PC keyboard) to exit this example.");
-            Console.ReadKey();
-        }
+            Console.Write("Select: ");
+            var selection = Console.ReadLine();
 
-        public static IMacroBoard OpenBoard(Predicate<IDeviceReference> boardSelector)
-        {
-            using var ctx = DeviceContext.Create()
-                .AddListener<StreamDeckListener>()
-                .AddListener<SocketIOBoardListener>()
-                ;
-
-            var sync = new object();
-            IReadOnlyList<IKnownDevice> deviceList = [];
-
-            void UpdateAndRedraw()
+            if (int.TryParse(selection, out var id))
             {
-                lock (sync)
-                {
-                    deviceList = ctx.KnownDevices.Where(d => boardSelector(d)).ToList();
-                    RedrawDeviceList(deviceList);
-                }
+                select = id;
             }
+        }
+        while (select < 0 || select >= list.Length);
 
-            using var subscription = ctx.DeviceStateReports.Subscribe(_ => UpdateAndRedraw());
+        return list[select];
+    }
 
-            while (true)
+    public static void WaitForKeyToExit()
+    {
+        Console.WriteLine("Please press any key (on PC keyboard) to exit this example.");
+        Console.ReadKey();
+    }
+
+    public static IMacroBoard OpenBoard(Predicate<IDeviceReference> boardSelector)
+    {
+        using var ctx = DeviceContext.Create()
+            .AddListener<StreamDeckListener>()
+            .AddListener<SocketIOBoardListener>()
+            ;
+
+        var sync = new object();
+        IReadOnlyList<IKnownDevice> deviceList = [];
+
+        void UpdateAndRedraw()
+        {
+            lock (sync)
             {
-                UpdateAndRedraw();
-                var selection = Console.ReadLine();
-
-                var refcopyDeviceList = deviceList;
-
-                if (!int.TryParse(selection, out var id))
-                {
-                    continue;
-                }
-
-                if (id >= 0 && id < refcopyDeviceList.Count)
-                {
-                    Console.Clear();
-
-                    var device = refcopyDeviceList[id]
-                        .Open()
-                        .WithDisconnectReplay()
-                        .WithButtonPressEffect();
-
-                    device.SetBrightness(100);
-                    return device;
-                }
+                deviceList = ctx.KnownDevices.Where(d => boardSelector(d)).ToList();
+                RedrawDeviceList(deviceList);
             }
         }
 
-        public static IMacroBoard OpenBoard()
+        using var subscription = ctx.DeviceStateReports.Subscribe(_ => UpdateAndRedraw());
+
+        while (true)
         {
-            return OpenBoard(x => true);
-        }
+            UpdateAndRedraw();
+            var selection = Console.ReadLine();
 
-        private static void RedrawDeviceList(IReadOnlyList<IKnownDevice> devices)
-        {
-            // Alternative to Console.Clear without flicker.
-            Console.SetCursorPosition(0, 0);
+            var refcopyDeviceList = deviceList;
 
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine();
-            Console.WriteLine("Devices:");
-
-            if (devices.Count == 0)
+            if (!int.TryParse(selection, out var id))
             {
-                Console.WriteLine("   (none)");
-            }
-            else
-            {
-                for (int i = 0; i < devices.Count; i++)
-                {
-                    var d = devices[i];
-                    Console.WriteLine($"{i,3}:  [{(d.Connected ? 'X' : ' ')}] {d.DeviceName}");
-                }
+                continue;
             }
 
-            Console.SetCursorPosition(0, 0);
+            if (id >= 0 && id < refcopyDeviceList.Count)
+            {
+                Console.Clear();
 
-            var text = "Select a device: ";
-            Console.Write(text.PadRight(Console.BufferWidth - 1));
-            Console.SetCursorPosition(0, 0);
-            Console.Write(text);
+                var device = refcopyDeviceList[id]
+                    .Open()
+                    .WithDisconnectReplay()
+                    .WithButtonPressEffect();
+
+                device.SetBrightness(100);
+                return device;
+            }
         }
+    }
+
+    public static IMacroBoard OpenBoard()
+    {
+        return OpenBoard(x => true);
+    }
+
+    private static void RedrawDeviceList(IReadOnlyList<IKnownDevice> devices)
+    {
+        // Alternative to Console.Clear without flicker.
+        Console.SetCursorPosition(0, 0);
+
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine();
+        Console.WriteLine("Devices:");
+
+        if (devices.Count == 0)
+        {
+            Console.WriteLine("   (none)");
+        }
+        else
+        {
+            for (int i = 0; i < devices.Count; i++)
+            {
+                var d = devices[i];
+                Console.WriteLine($"{i,3}:  [{(d.Connected ? 'X' : ' ')}] {d.DeviceName}");
+            }
+        }
+
+        Console.SetCursorPosition(0, 0);
+
+        var text = "Select a device: ";
+        Console.Write(text.PadRight(Console.BufferWidth - 1));
+        Console.SetCursorPosition(0, 0);
+        Console.Write(text);
     }
 }

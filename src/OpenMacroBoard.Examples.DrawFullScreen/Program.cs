@@ -4,27 +4,26 @@ using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Processing;
 using System.Reflection;
 
-namespace OpenMacroBoard.Examples.DrawFullScreen
+namespace OpenMacroBoard.Examples.DrawFullScreen;
+
+internal static class Program
 {
-    internal static class Program
+    private static void Main()
     {
-        private static void Main()
-        {
-            using var deck = ExampleHelper.OpenBoard();
-            using var bmp = LoadExampleImageFromResources();
+        using var deck = ExampleHelper.OpenBoard();
+        using var bmp = LoadExampleImageFromResources();
 
-            deck.DrawFullScreenBitmap(bmp, ResizeMode.Crop);
-            ExampleHelper.WaitForKeyToExit();
-        }
+        deck.DrawFullScreenBitmap(bmp, ResizeMode.Crop);
+        ExampleHelper.WaitForKeyToExit();
+    }
 
-        private static Image LoadExampleImageFromResources()
-        {
-            const string resourceName = "OpenMacroBoard.Examples.DrawFullScreen.ExampleImageText.jpg";
+    private static Image LoadExampleImageFromResources()
+    {
+        const string resourceName = "OpenMacroBoard.Examples.DrawFullScreen.ExampleImageText.jpg";
 
-            var asm = Assembly.GetExecutingAssembly();
-            using var resStream = asm.GetManifestResourceStream(resourceName);
+        var asm = Assembly.GetExecutingAssembly();
+        using var resStream = asm.GetManifestResourceStream(resourceName);
 
-            return Image.Load(resStream);
-        }
+        return Image.Load(resStream);
     }
 }

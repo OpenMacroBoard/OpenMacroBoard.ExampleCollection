@@ -1,9 +1,8 @@
-namespace OpenMacroBoard.Examples.XorFlip
+namespace OpenMacroBoard.Examples.XorFlip;
+
+public enum XorFlipButtonState
 {
-    public enum XorFlipButtonState
-    {
-        Blocked,
-        Off,
-        On,
-    }
+    Blocked,
+    Off,
+    On,
 }

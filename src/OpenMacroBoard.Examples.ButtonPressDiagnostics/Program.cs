@@ -9,82 +9,81 @@ using SixLabors.ImageSharp.Processing;
 using System;
 using System.Globalization;
 
-namespace OpenMacroBoard.Examples.ButtonPressDiagnostics
+namespace OpenMacroBoard.Examples.ButtonPressDiagnostics;
+
+internal static class Program
 {
-    internal static class Program
+    private static readonly Font Font = SystemFonts.CreateFont("Arial", 24);
+    private static int[] counter;
+
+    private static void Main(string[] args)
     {
-        private static readonly Font Font = SystemFonts.CreateFont("Arial", 24);
-        private static int[] counter;
+        using var deck = ExampleHelper.OpenBoard();
 
-        private static void Main(string[] args)
+        deck.SetBrightness(100);
+        counter = new int[deck.Keys.Count];
+
+        Console.WriteLine("INFO: Press some keys on the Stream Deck.");
+        deck.ClearKeys();
+        deck.KeyStateChanged += Deck_KeyPressed;
+        Console.WriteLine();
+
+        Console.WriteLine("Options: (q)uit, (c)lear, (r)eset");
+
+        while (true)
         {
-            using var deck = ExampleHelper.OpenBoard();
+            var key = Console.ReadKey(true);
 
-            deck.SetBrightness(100);
-            counter = new int[deck.Keys.Count];
-
-            Console.WriteLine("INFO: Press some keys on the Stream Deck.");
-            deck.ClearKeys();
-            deck.KeyStateChanged += Deck_KeyPressed;
-            Console.WriteLine();
-
-            Console.WriteLine("Options: (q)uit, (c)lear, (r)eset");
-
-            while (true)
+            switch (key.Key)
             {
-                var key = Console.ReadKey(true);
+                case ConsoleKey.Q:
+                    return;
 
-                switch (key.Key)
-                {
-                    case ConsoleKey.Q:
-                        return;
+                case ConsoleKey.C:
+                    deck.ClearKeys();
+                    break;
 
-                    case ConsoleKey.C:
-                        deck.ClearKeys();
-                        break;
-
-                    case ConsoleKey.R:
-                        deck.ClearKeys();
-                        deck.SetBrightness(100);
-                        Array.Clear(counter, 0, counter.Length);
-                        break;
-                }
+                case ConsoleKey.R:
+                    deck.ClearKeys();
+                    deck.SetBrightness(100);
+                    Array.Clear(counter, 0, counter.Length);
+                    break;
             }
         }
+    }
 
-        private static void Deck_KeyPressed(object sender, KeyEventArgs e)
+    private static void Deck_KeyPressed(object sender, KeyEventArgs e)
+    {
+        if (sender is not IMacroBoard d)
         {
-            if (sender is not IMacroBoard d)
-            {
-                return;
-            }
+            return;
+        }
 
+        if (e.IsDown)
+        {
+            counter[e.Key]++;
+        }
+
+        var keyImage = new Image<Bgr24>(96, 96);
+
+        keyImage.Mutate(img =>
+        {
             if (e.IsDown)
             {
-                counter[e.Key]++;
+                var circle = new EllipsePolygon(72, 20, 5);
+                img.Fill(Color.White, circle);
             }
 
-            var keyImage = new Image<Bgr24>(96, 96);
+            img.DrawText(
+                counter[e.Key].ToString(CultureInfo.InvariantCulture),
+                Font,
+                Color.White,
+                new PointF(10, 10)
+            );
+        });
 
-            keyImage.Mutate(img =>
-            {
-                if (e.IsDown)
-                {
-                    var circle = new EllipsePolygon(72, 20, 5);
-                    img.Fill(Color.White, circle);
-                }
+        var key = KeyBitmap.Create.FromImageSharpImage(keyImage);
 
-                img.DrawText(
-                    counter[e.Key].ToString(CultureInfo.InvariantCulture),
-                    Font,
-                    Color.White,
-                    new PointF(10, 10)
-                );
-            });
-
-            var key = KeyBitmap.Create.FromImageSharpImage(keyImage);
-
-            d.SetKeyBitmap(e.Key, key);
-        }
+        d.SetKeyBitmap(e.Key, key);
     }
 }
