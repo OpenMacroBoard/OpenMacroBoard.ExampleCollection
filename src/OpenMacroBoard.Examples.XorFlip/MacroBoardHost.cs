@@ -13,7 +13,9 @@ public class MacroBoardHost : IXorFlipHost
 
     public MacroBoardHost(IMacroBoard board)
     {
-        this.board = board ?? throw new ArgumentNullException(nameof(board));
+        ArgumentNullException.ThrowIfNull(board);
+
+        this.board = board;
         board.KeyStateChanged += Board_KeyStateChanged;
 
         Width = board.Keys.CountX;

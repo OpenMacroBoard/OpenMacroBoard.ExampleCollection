@@ -10,7 +10,9 @@ public class XorFlipGame
 
     public XorFlipGame(IXorFlipHost host)
     {
-        this.host = host ?? throw new ArgumentNullException(nameof(host));
+        ArgumentNullException.ThrowIfNull(host);
+
+        this.host = host;
         this.host.ButtonPressed += Host_ButtonPressed;
 
         board = new XorFlipButtonState[host.Width, host.Height];
