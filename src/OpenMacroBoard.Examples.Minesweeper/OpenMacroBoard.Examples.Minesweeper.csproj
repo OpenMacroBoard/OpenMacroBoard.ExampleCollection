@@ -16,9 +16,4 @@
     <EmbeddedResource Include="icons\mine.png" />
     <EmbeddedResource Include="icons\unknown.png" />
   </ItemGroup>
-
-  <ItemGroup>
-    <PackageReference Include="System.ValueTuple" Version="4.6.1" />
-  </ItemGroup>
-
 </Project>
